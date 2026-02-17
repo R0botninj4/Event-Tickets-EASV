@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.HelloController">
+   <top>
+      <VBox spacing="10">
+         <padding>
+            <Insets bottom="10" left="10" right="10" top="10" />
+         </padding>
+         <children>
+            <HBox prefHeight="53.0" prefWidth="753.0">
+               <children>
+                  <Label prefHeight="67.0" prefWidth="172.0" text="Users">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Region prefHeight="53.0" prefWidth="711.0" HBox.hgrow="ALWAYS" />
+                  <Label prefHeight="33.0" prefWidth="84.0" text="Admin">
+                     <HBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="37.0" prefWidth="121.0" text="Close">
+                     <HBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+   <right>
+      <VBox prefHeight="507.0" prefWidth="300" spacing="10" styleClass="cBoarder">
+         <padding>
+            <Insets bottom="10" left="10" right="10" top="10" />
+         </padding>
+         <children>
+            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="User creation" />
+            <TextField promptText="Name" />
+            <TextField promptText="Phone number" />
+            <TextField promptText="E-mail" />
+            <ComboBox prefHeight="25.0" prefWidth="288.0" promptText="Role" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="289.0" text="Add">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin></Button>
+            <Separator prefHeight="9.0" prefWidth="277.0" />
+            <Label alignment="CENTER" prefHeight="17.0" prefWidth="287.0" text="Selected User" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="296.0" text="Delete User">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Button>
+            <Separator prefWidth="200.0" />
+            <Label alignment="CENTER" prefHeight="17.0" prefWidth="287.0" text="Selected User" />
+            <Button maxWidth="Infinity" text="Edit User" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Update User" />
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="10.0" right="10.0" />
+         </BorderPane.margin>
+      </VBox>
+   </right>
+   <center>
+      <TableView prefHeight="499.0" prefWidth="809.0" styleClass="cBoarder" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" />
+         </BorderPane.margin>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+         <columns>
+            <TableColumn prefWidth="97.3333740234375" text="Name" />
+            <TableColumn prefWidth="76.66668701171875" text="Phone number" />
+            <TableColumn prefWidth="82.0" text="E-mail" />
+            <TableColumn prefWidth="81.33331298828125" text="Role" />
+         </columns>
+      </TableView>
+   </center>
+</BorderPane>
