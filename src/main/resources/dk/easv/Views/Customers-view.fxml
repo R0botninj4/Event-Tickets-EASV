@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="721.0" prefWidth="1040.0" stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.HelloController">
+<BorderPane prefHeight="721.0" prefWidth="1040.0" stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.Customers">
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>

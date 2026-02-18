@@ -63,6 +63,11 @@ public class HelloController implements Initializable {
     }
 
     @FXML
+    private void onClickOpenVoucher(ActionEvent actionEvent) throws IOException {
+        openWindow("/dk/easv/Views/Voucher-view.fxml", "Event Info");
+    }
+
+    @FXML
     private void onClickOpenCreateEditEvent(ActionEvent actionEvent) throws IOException {
         openWindow("/dk/easv/Views/CreateEditEvent-view.fxml", "Event");
     }
