@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.ManageUsers">
+<BorderPane stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.ManageUsers">
    <top>
       <VBox spacing="10">
          <padding>
@@ -29,12 +29,12 @@
                      </font>
                   </Label>
                   <Region prefHeight="53.0" prefWidth="711.0" HBox.hgrow="ALWAYS" />
-                  <Label prefHeight="33.0" prefWidth="84.0" text="Admin">
+                  <Label fx:id="lblUserRole" prefHeight="33.0" prefWidth="84.0" text="Admin">
                      <HBox.margin>
                         <Insets bottom="10.0" top="10.0" />
                      </HBox.margin>
                   </Label>
-                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="37.0" prefWidth="121.0" text="Close">
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#Close" prefHeight="37.0" prefWidth="121.0" text="Close">
                      <HBox.margin>
                         <Insets bottom="10.0" top="10.0" />
                      </HBox.margin>

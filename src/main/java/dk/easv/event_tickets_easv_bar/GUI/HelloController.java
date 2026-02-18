@@ -64,7 +64,7 @@ public class HelloController implements Initializable {
 
     @FXML
     private void onClickOpenVoucher(ActionEvent actionEvent) throws IOException {
-        openWindow("/dk/easv/Views/Voucher-view.fxml", "Event Info");
+        openWindow("/dk/easv/Views/Voucher-view.fxml", "Voucher Info");
     }
 
     @FXML
@@ -85,6 +85,21 @@ public class HelloController implements Initializable {
     @FXML
     private void onClickOpenCustomers(ActionEvent actionEvent) throws IOException {
         openWindow("/dk/easv/Views/Customers-view.fxml", "Customers");
+    }
+
+    @FXML
+    private void onClickOpenViewEvent(ActionEvent actionEvent) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/dk/easv/Views/Event-view.fxml"));
+        Scene scene = new Scene(loader.load());
+
+        Stage stage = new Stage();
+        stage.setTitle("Event Info");
+        stage.setScene(scene);
+
+        stage.setResizable(false); // only here
+
+        stage.show();
     }
 
     @FXML

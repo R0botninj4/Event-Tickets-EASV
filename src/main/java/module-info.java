@@ -5,6 +5,9 @@ module dk.easv.event_tickets_easv_bar {
     requires java.sql;
     requires java.naming;
     requires com.microsoft.sqlserver.jdbc;
+    requires java.desktop;
+    requires javafx.graphics;
+    requires javafx.base;
 
     opens dk.easv.event_tickets_easv_bar.GUI to javafx.fxml;
 

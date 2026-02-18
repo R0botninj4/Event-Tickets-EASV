@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-public class ManageEvent {
+public class Event {
     @FXML
     private void Close(ActionEvent event) {
 
