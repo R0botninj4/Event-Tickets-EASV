@@ -62,7 +62,7 @@
                            </HBox.margin>
                         </Label>
                         <Region prefHeight="28.0" prefWidth="316.0" HBox.hgrow="ALWAYS" />
-                        <TextField prefHeight="33.0" prefWidth="233.0" promptText="Search Customer efwefw">
+                        <TextField prefHeight="33.0" prefWidth="233.0" promptText="Search Customer">
                            <cursor>
                               <Cursor fx:constant="DEFAULT" />
                            </cursor>
