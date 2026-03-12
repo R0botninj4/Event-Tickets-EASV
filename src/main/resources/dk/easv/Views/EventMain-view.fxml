@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="744.0" prefWidth="972.0" stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.HelloController">
+<BorderPane prefHeight="744.0" prefWidth="972.0" stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.HelloController">
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -126,7 +126,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </Label>
-                        <Region prefHeight="28.0" prefWidth="89.0" HBox.hgrow="ALWAYS" />
+                        <Region prefHeight="28.0" prefWidth="81.0" HBox.hgrow="ALWAYS" />
                         <TextField prefHeight="33.0" prefWidth="233.0" promptText="Search event">
                            <cursor>
                               <Cursor fx:constant="DEFAULT" />
@@ -137,16 +137,13 @@
                         </TextField>
                         <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="93.0" text="Filter">
                            <HBox.margin>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              <Insets bottom="10.0" right="10.0" top="10.0" />
                            </HBox.margin>
                         </Button>
-                        <Separator fx:id="TILMADS" orientation="VERTICAL" prefHeight="200.0">
+                        <Separator orientation="VERTICAL" prefHeight="200.0" />
+                        <Button mnemonicParsing="false" onAction="#onClickOpenViewEvent" prefHeight="36.0" prefWidth="93.0" text="View Event">
                            <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
-                           </HBox.margin></Separator>
-                        <Button fx:id="TILMADS1" mnemonicParsing="false" prefHeight="36.0" prefWidth="93.0" text="View Event">
-                           <HBox.margin>
-                              <Insets bottom="10.0" right="10.0" top="10.0" />
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </HBox.margin>
                         </Button>
                      </children>
