@@ -56,6 +56,9 @@
             <TextField promptText="Coordinator" />
             <TextField promptText="Ticket amount" />
             <TextField promptText="Info" />
+            <TextField promptText="End date" />
+            <TextField promptText="End time" />
+            <TextField promptText="Location guidance" />
             <Separator />
             <Button maxWidth="Infinity" text="Add Event" />
             <Separator prefHeight="49.0" prefWidth="280.0" />
