@@ -6,7 +6,6 @@ import dk.easv.event_tickets_easv_bar.DAL.DB.DBConnector;
 import java.io.IOException;
 import java.sql.*;
 
-
 public class UserDAO {
 
     private final DBConnector dbConnector;
@@ -21,7 +20,7 @@ public class UserDAO {
 
     // ===================== LOGIN =====================
     public User login(String username, String password) {
-        String sql = "SELECT id, username, role FROM Users WHERE username = ? AND password = ?";
+        String sql = "SELECT UserID, Username, RoleInt FROM Users WHERE Username = ? AND PasswordHash = ?";
 
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -32,9 +31,9 @@ public class UserDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new User(
-                            rs.getInt("id"),
-                            rs.getString("username"),
-                            rs.getInt("role")
+                            rs.getInt("UserID"),
+                            rs.getString("Username"),
+                            rs.getInt("RoleInt")  // <-- bruger nu RoleInt
                     );
                 }
             }
@@ -43,12 +42,12 @@ public class UserDAO {
             e.printStackTrace();
         }
 
-        return null; // Login fejlede
+        return null; // login fejlede
     }
 
     // ===================== GET USER BY ID =====================
     public User getUserById(int id) {
-        String sql = "SELECT id, username, role FROM Users WHERE id = ?";
+        String sql = "SELECT UserID, Username, RoleInt FROM Users WHERE UserID = ?";
 
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -58,9 +57,9 @@ public class UserDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new User(
-                            rs.getInt("id"),
-                            rs.getString("username"),
-                            rs.getInt("role")
+                            rs.getInt("UserID"),
+                            rs.getString("Username"),
+                            rs.getInt("RoleInt")
                     );
                 }
             }
@@ -74,7 +73,7 @@ public class UserDAO {
 
     // ===================== ADD NEW USER =====================
     public int addUser(String username, String password, int role) {
-        String sql = "INSERT INTO Users (username, password, role) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Users (Username, Password, RoleInt) VALUES (?, ?, ?)";
 
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -94,37 +93,5 @@ public class UserDAO {
         }
 
         return -1;
-    }
-
-    // ===================== UPDATE PASSWORD =====================
-    public void updatePassword(int userId, String newPassword) {
-        String sql = "UPDATE Users SET password = ? WHERE id = ?";
-
-        try (Connection conn = dbConnector.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, newPassword);
-            stmt.setInt(2, userId);
-
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // ===================== DELETE USER =====================
-    public void deleteUser(int userId) {
-        String sql = "DELETE FROM Users WHERE id = ?";
-
-        try (Connection conn = dbConnector.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, userId);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

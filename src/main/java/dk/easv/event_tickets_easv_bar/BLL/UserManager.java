@@ -13,13 +13,10 @@ public class UserManager {
         userDAO = new UserDAO();
     }
 
-    public User login(String username, String password) throws SQLException {
-        // Du kan tilføje ekstra logik her, fx:
-        // validering af input, logning, fejlmeddelelser
-        if (username.isEmpty() || password.isEmpty()) {
+    public User login(String username, String passwordHash) throws SQLException {
+        if (username.isEmpty() || passwordHash.isEmpty()) {
             return null;
         }
-
-        return userDAO.login(username, password);
+        return userDAO.login(username, passwordHash);
     }
 }
