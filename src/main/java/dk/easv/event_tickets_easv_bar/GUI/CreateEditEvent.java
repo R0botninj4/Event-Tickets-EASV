@@ -1,5 +1,6 @@
 package dk.easv.event_tickets_easv_bar.GUI;
 
+import dk.easv.event_tickets_easv_bar.GUI.Interface.ClosableWindow;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 

@@ -1,4 +1,4 @@
-package dk.easv.event_tickets_easv_bar.GUI;
+package dk.easv.event_tickets_easv_bar.GUI.Interface;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;

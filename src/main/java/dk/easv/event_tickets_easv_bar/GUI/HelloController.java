@@ -1,6 +1,7 @@
 package dk.easv.event_tickets_easv_bar.GUI;
 
 import dk.easv.event_tickets_easv_bar.BE.User;
+import dk.easv.event_tickets_easv_bar.GUI.Login.Session;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

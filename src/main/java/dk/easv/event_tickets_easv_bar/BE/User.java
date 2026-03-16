@@ -1,9 +1,10 @@
 package dk.easv.event_tickets_easv_bar.BE;
 
 public class User {
+
     private int id;
     private String username;
-    private int role; // 1 = Admin, 2 = Coordinator, 3 = Customer
+    private int role;
 
     public User(int id, String username, int role) {
         this.id = id;
@@ -12,6 +13,8 @@ public class User {
     }
 
     public int getId() { return id; }
+
     public String getUsername() { return username; }
+
     public int getRole() { return role; }
 }

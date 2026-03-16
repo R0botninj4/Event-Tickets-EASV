@@ -1,4 +1,4 @@
-package dk.easv.event_tickets_easv_bar.GUI;
+package dk.easv.event_tickets_easv_bar.GUI.Login;
 
 import dk.easv.event_tickets_easv_bar.BE.User;
 import dk.easv.event_tickets_easv_bar.BLL.UserManager;
