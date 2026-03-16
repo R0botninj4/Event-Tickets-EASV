@@ -5,14 +5,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-public class CreateTicket {
+public class CreateTicket implements ClosableWindow {
+
     @FXML
     private void Close(ActionEvent event) {
-
-        Stage stage = (Stage) ((Button) event.getSource())
-                .getScene()
-                .getWindow();
-
-        stage.close();
+        closeWindow(event);
     }
 }
