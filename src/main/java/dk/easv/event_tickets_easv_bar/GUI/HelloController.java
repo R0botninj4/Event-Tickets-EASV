@@ -1,14 +1,18 @@
 package dk.easv.event_tickets_easv_bar.GUI;
 
+import dk.easv.event_tickets_easv_bar.BE.Event;
 import dk.easv.event_tickets_easv_bar.BE.User;
+import dk.easv.event_tickets_easv_bar.BLL.EventManager;
 import dk.easv.event_tickets_easv_bar.GUI.Login.Session;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -18,39 +22,75 @@ import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
 
+    // Login & User info
     @FXML
     private Label welcomeText;
-
     @FXML
     private Button btnManageUsers;
-
     @FXML
     private Label lblUserRole;
-
     private User loggedInUser;
+
+    // Event TableView
+    @FXML
+    private TableView<Event> tblEvents;
+    @FXML
+    private TableColumn<Event, String> colName;
+    @FXML
+    private TableColumn<Event, String> colLocation;
+    @FXML
+    private TableColumn<Event, String> colInfo;
+    @FXML
+    private TableColumn<Event, Object> colDate;
+    @FXML
+    private TableColumn<Event, Integer> colSold;
+    @FXML
+    private TableColumn<Event, String> colStatus;
+    @FXML
+    private TableColumn<Event, String> colCoordiantor;
+    @FXML
+
+    private EventManager eventManager;
+    private ObservableList<Event> events;
+
+    public HelloController() {
+        eventManager = new EventManager();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        // Hent bruger fra Session
+        // Login / Session setup
         loggedInUser = Session.getUser();
-
-        if (loggedInUser == null) return;
-
-        if (loggedInUser.getRole() == 1) { // ADMIN
-            lblUserRole.setText("Admin");
+        if (loggedInUser != null) {
+            if (loggedInUser.getRole() == 1) {
+                lblUserRole.setText("Admin");
+            } else if (loggedInUser.getRole() == 2) {
+                lblUserRole.setText("Coordinator");
+                btnManageUsers.setVisible(false);
+                btnManageUsers.setManaged(false);
+            }
         }
-        else if (loggedInUser.getRole() == 2) { // COORDINATOR
-            lblUserRole.setText("Coordinator");
 
-            // Coordinator må ikke se Manage Users
-            btnManageUsers.setVisible(false);
-            btnManageUsers.setManaged(false);
+        // Event Table setup
+        setupTable();
+        loadData();
+    }
 
-            //Vis der er ting der skal fjernes 
-            //fx:id.setVisible(false);
-            //fx:id.setManaged(false);
-        }
+    private void setupTable() {
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        colInfo.setCellValueFactory(new PropertyValueFactory<>("info"));
+        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        colSold.setCellValueFactory(new PropertyValueFactory<>("sold"));
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colCoordiantor.setCellValueFactory(new PropertyValueFactory<>("coordinatorID"));
+
+
+    }
+
+    private void loadData() {
+        events = FXCollections.observableArrayList(eventManager.getEvents());
+        tblEvents.setItems(events);
     }
 
     @FXML
@@ -90,45 +130,29 @@ public class HelloController implements Initializable {
 
     @FXML
     private void onClickOpenViewEvent(ActionEvent actionEvent) throws IOException {
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/dk/easv/Views/Event-view.fxml"));
         Scene scene = new Scene(loader.load());
-
         Stage stage = new Stage();
         stage.setTitle("Event Info");
         stage.setScene(scene);
-
-        stage.setResizable(false); // only here
-
+        stage.setResizable(false);
         stage.show();
     }
 
     @FXML
     private void handleLogout(ActionEvent actionEvent) throws IOException {
-
-        // Ryd session
         Session.clear();
-
-        // Hent stage fra den knap der blev trykket på
-        Stage stage = (Stage) ((Button) actionEvent.getSource())
-                .getScene()
-                .getWindow();
-
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         stage.close();
 
-        // Åbn login igen
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/dk/easv/Views/Login-view.fxml")
-        );
-
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/dk/easv/Views/Login-view.fxml"));
         Stage loginStage = new Stage();
         loginStage.setScene(new Scene(loader.load()));
         loginStage.setTitle("Login");
         loginStage.show();
     }
 
-
-    // 🔥 Smart genbrugsmethode
+    // Genbrugsmethod til åbning af nye vinduer
     private void openWindow(String path, String title) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(path));
         Scene scene = new Scene(fxmlLoader.load());

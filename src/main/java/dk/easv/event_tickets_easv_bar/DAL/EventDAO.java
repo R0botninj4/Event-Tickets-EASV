@@ -13,38 +13,39 @@ public class EventDAO implements IEventDAO {
 
     private DBConnector dbConnector;
 
-    public EventDAO(){
-        try{
+    public EventDAO() {
+        try {
             dbConnector = new DBConnector();
-        }catch(IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<Event> getAllEvents(){
-
+    public List<Event> getAllEvents() {
         List<Event> events = new ArrayList<>();
-
         String sql = "SELECT * FROM Events";
 
-        try(Connection conn = dbConnector.getConnection();
-            Statement stmt = conn.createStatement()){
+        try (Connection conn = dbConnector.getConnection();
+             Statement stmt = conn.createStatement()) {
 
             ResultSet rs = stmt.executeQuery(sql);
 
-            while(rs.next()){
+            while (rs.next()) {
                 events.add(new Event(
                         rs.getInt("EventID"),
                         rs.getString("EventName"),
                         rs.getString("EventInfo"),
                         rs.getDate("EventDate").toLocalDate(),
                         rs.getTime("EndTime").toLocalTime(),
-                        rs.getString("Location")
+                        rs.getString("Location"),
+                        rs.getInt("TicketAmount"),
+                        rs.getInt("TicketsSold"),
+                        rs.getInt("CoordinatorID")
                 ));
             }
 
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -52,29 +53,30 @@ public class EventDAO implements IEventDAO {
     }
 
     @Override
-    public Event getEventById(int id){
-
+    public Event getEventById(int id) {
         String sql = "SELECT * FROM Events WHERE EventID=?";
 
-        try(Connection conn = dbConnector.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)){
+        try (Connection conn = dbConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1,id);
-
+            stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 return new Event(
                         rs.getInt("EventID"),
                         rs.getString("EventName"),
                         rs.getString("EventInfo"),
                         rs.getDate("EventDate").toLocalDate(),
                         rs.getTime("EndTime").toLocalTime(),
-                        rs.getString("Location")
+                        rs.getString("Location"),
+                        rs.getInt("TicketAmount"),
+                        rs.getInt("TicketSold"),
+                        rs.getInt("CoordinatorID")
                 );
             }
 
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -82,22 +84,24 @@ public class EventDAO implements IEventDAO {
     }
 
     @Override
-    public void createEvent(Event event){
+    public void createEvent(Event event) {
+        String sql = "INSERT INTO Events (EventName, EventInfo, EventDate, EndTime, Location, TicketAmount, TicketSold, CoordinatorID) VALUES (?,?,?,?,?,?,?,?)";
 
-        String sql = "INSERT INTO Events (EventName,EventInfo,EventDate,EndTime,Location) VALUES (?,?,?,?,?)";
+        try (Connection conn = dbConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        try(Connection conn = dbConnector.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)){
-
-            stmt.setString(1,event.getName());
-            stmt.setString(2,event.getInfo());
-            stmt.setDate(3,Date.valueOf(event.getDate()));
-            stmt.setTime(4,Time.valueOf(event.getEndTime()));
-            stmt.setString(5,event.getLocation());
+            stmt.setString(1, event.getName());
+            stmt.setString(2, event.getInfo());
+            stmt.setDate(3, Date.valueOf(event.getDate()));
+            stmt.setTime(4, Time.valueOf(event.getEndTime()));
+            stmt.setString(5, event.getLocation());
+            stmt.setInt(6, event.getTicketAmount());
+            stmt.setInt(7, event.getTicketSold());
+            stmt.setInt(8, event.getCoordinatorID());
 
             stmt.executeUpdate();
 
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
