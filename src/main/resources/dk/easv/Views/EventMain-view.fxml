@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="744.0" prefWidth="972.0" stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.HelloController">
+<BorderPane prefHeight="744.0" prefWidth="972.0" stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.HelloController">
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -135,11 +135,6 @@
                               <Insets bottom="10.0" top="10.0" />
                            </HBox.margin>
                         </TextField>
-                        <Button onAction="#handleFilter" mnemonicParsing="false" prefHeight="36.0" prefWidth="93.0" text="Filter">
-                           <HBox.margin>
-                              <Insets bottom="10.0" right="10.0" top="10.0" />
-                           </HBox.margin>
-                        </Button>
                         <Separator orientation="VERTICAL" prefHeight="200.0" />
                         <Button mnemonicParsing="false" onAction="#onClickOpenViewEvent" prefHeight="36.0" prefWidth="93.0" text="View Event">
                            <HBox.margin>
