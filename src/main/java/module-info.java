@@ -17,7 +17,7 @@ module dk.easv.event_tickets_easv_bar {
     exports dk.easv.event_tickets_easv_bar.DAL;
     exports dk.easv.event_tickets_easv_bar.DAL.DB;
     exports dk.easv.event_tickets_easv_bar.DAL.Interface;
-    exports dk.easv.event_tickets_easv_bar.BLL.Interface;
+
     exports dk.easv.event_tickets_easv_bar.GUI.Login;
     opens dk.easv.event_tickets_easv_bar.GUI.Login to javafx.fxml;
     exports dk.easv.event_tickets_easv_bar.GUI.Interface;

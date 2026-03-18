@@ -1,11 +1,10 @@
 package dk.easv.event_tickets_easv_bar.BLL;
 
 import dk.easv.event_tickets_easv_bar.BE.Ticket;
-import dk.easv.event_tickets_easv_bar.BLL.Interface.ITicketManager;
 import dk.easv.event_tickets_easv_bar.DAL.Interface.ITicketDAO;
 import dk.easv.event_tickets_easv_bar.DAL.TicketDAO;
 
-public class TicketManager implements ITicketManager {
+public class TicketManager {
 
     private final ITicketDAO ticketDAO;
 
@@ -13,7 +12,7 @@ public class TicketManager implements ITicketManager {
         ticketDAO = new TicketDAO();
     }
 
-    @Override
+
     public void buyTicket(Ticket ticket) {
         ticketDAO.buyTicket(ticket);
     }

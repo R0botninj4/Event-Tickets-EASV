@@ -1,11 +1,11 @@
 package dk.easv.event_tickets_easv_bar.BLL;
 
 import dk.easv.event_tickets_easv_bar.BE.Voucher;
-import dk.easv.event_tickets_easv_bar.BLL.Interface.IVoucherManager;
+
 import dk.easv.event_tickets_easv_bar.DAL.Interface.IVoucherDAO;
 import dk.easv.event_tickets_easv_bar.DAL.VoucherDAO;
 
-public class VoucherManager implements IVoucherManager {
+public class VoucherManager {
 
     private final IVoucherDAO voucherDAO;
 
@@ -13,7 +13,7 @@ public class VoucherManager implements IVoucherManager {
         voucherDAO = new VoucherDAO();
     }
 
-    @Override
+
     public Voucher getVoucher(String code) {
         return voucherDAO.getVoucher(code);
     }
