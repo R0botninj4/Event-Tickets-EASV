@@ -21,7 +21,11 @@ public class LoginController {
 
     @FXML
     private Label lblMessage;
-
+    @FXML
+    private void initialize() {
+        txtUsername.setOnAction(e -> handleLogin(new ActionEvent()));
+        txtPassword.setOnAction(e -> handleLogin(new ActionEvent()));
+    }
     private final UserManager userManager = new UserManager();
 
     @FXML
