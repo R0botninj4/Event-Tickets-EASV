@@ -6,6 +6,8 @@ import dk.easv.event_tickets_easv_bar.BLL.EventManager;
 import dk.easv.event_tickets_easv_bar.GUI.Login.Session;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,9 +49,13 @@ public class HelloController implements Initializable {
     @FXML
     private TableColumn<Event, String> colStatus;
     @FXML
-    private TableColumn<Event, String> colCoordiantor;
+    private TableColumn<Event, String> colCoordinator;
     @FXML
+    private TextField txtSearch;
 
+    private FilteredList<Event> filteredEvents;
+
+    @FXML
     private EventManager eventManager;
     private ObservableList<Event> events;
 
@@ -71,11 +77,35 @@ public class HelloController implements Initializable {
             }
         }
 
+
+        //Live search
+        txtSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredEvents.setPredicate(event -> {
+
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (event.getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (event.getLocation().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (event.getInfo().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+
+                return false;
+            });
+        });
         // Event Table setup
         setupTable();
         loadData();
     }
-
+    @FXML
+    private void handleFilter(){
+    }
     private void setupTable() {
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
@@ -83,14 +113,20 @@ public class HelloController implements Initializable {
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colSold.setCellValueFactory(new PropertyValueFactory<>("sold"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-        colCoordiantor.setCellValueFactory(new PropertyValueFactory<>("coordinatorID"));
+        colCoordinator.setCellValueFactory(new PropertyValueFactory<>("coordinatorName"));
 
 
     }
 
     private void loadData() {
         events = FXCollections.observableArrayList(eventManager.getEvents());
-        tblEvents.setItems(events);
+
+        filteredEvents = new FilteredList<>(events, p -> true);
+
+        SortedList<Event> sortedData = new SortedList<>(filteredEvents);
+        sortedData.comparatorProperty().bind(tblEvents.comparatorProperty());
+
+        tblEvents.setItems(sortedData);
     }
 
     @FXML

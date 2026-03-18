@@ -3,6 +3,8 @@ package dk.easv.event_tickets_easv_bar.DAL;
 import dk.easv.event_tickets_easv_bar.BE.Event;
 import dk.easv.event_tickets_easv_bar.DAL.DB.DBConnector;
 import dk.easv.event_tickets_easv_bar.DAL.Interface.IEventDAO;
+import java.time.LocalTime;
+import java.time.LocalDate;
 
 import java.io.IOException;
 import java.sql.*;
@@ -24,24 +26,43 @@ public class EventDAO implements IEventDAO {
     @Override
     public List<Event> getAllEvents() {
         List<Event> events = new ArrayList<>();
-        String sql = "SELECT * FROM Events";
+
+        String sql = """
+            SELECT 
+                e.EventID,
+                e.EventName,
+                e.EventInfo,
+                e.EventDate,
+                e.EndTime,
+                e.Location,
+                e.TicketAmount,
+                e.TicketsSold,
+                e.CoordinatorID,
+                u.Name AS CoordinatorName
+            FROM Events e
+            LEFT JOIN Users u ON e.CoordinatorID = u.UserID
+        """;
 
         try (Connection conn = dbConnector.getConnection();
-             Statement stmt = conn.createStatement()) {
-
-            ResultSet rs = stmt.executeQuery(sql);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
+                LocalTime endTime = null;
+                Time sqlTime = rs.getTime("EndTime");
+                if (sqlTime != null) endTime = sqlTime.toLocalTime();
+
                 events.add(new Event(
                         rs.getInt("EventID"),
                         rs.getString("EventName"),
                         rs.getString("EventInfo"),
                         rs.getDate("EventDate").toLocalDate(),
-                        rs.getTime("EndTime").toLocalTime(),
+                        endTime,
                         rs.getString("Location"),
                         rs.getInt("TicketAmount"),
                         rs.getInt("TicketsSold"),
-                        rs.getInt("CoordinatorID")
+                        rs.getInt("CoordinatorID"),
+                        rs.getString("CoordinatorName")
                 ));
             }
 
@@ -54,7 +75,22 @@ public class EventDAO implements IEventDAO {
 
     @Override
     public Event getEventById(int id) {
-        String sql = "SELECT * FROM Events WHERE EventID=?";
+        String sql = """
+            SELECT 
+                e.EventID,
+                e.EventName,
+                e.EventInfo,
+                e.EventDate,
+                e.EndTime,
+                e.Location,
+                e.TicketAmount,
+                e.TicketsSold,
+                e.CoordinatorID,
+                u.Name AS CoordinatorName
+            FROM Events e
+            LEFT JOIN Users u ON e.CoordinatorID = u.UserID
+            WHERE e.EventID = ?
+        """;
 
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -63,16 +99,21 @@ public class EventDAO implements IEventDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
+                LocalTime endTime = null;
+                Time sqlTime = rs.getTime("EndTime");
+                if (sqlTime != null) endTime = sqlTime.toLocalTime();
+
                 return new Event(
                         rs.getInt("EventID"),
                         rs.getString("EventName"),
                         rs.getString("EventInfo"),
                         rs.getDate("EventDate").toLocalDate(),
-                        rs.getTime("EndTime").toLocalTime(),
+                        endTime,
                         rs.getString("Location"),
                         rs.getInt("TicketAmount"),
-                        rs.getInt("TicketSold"),
-                        rs.getInt("CoordinatorID")
+                        rs.getInt("TicketsSold"),
+                        rs.getInt("CoordinatorID"),
+                        rs.getString("CoordinatorName")
                 );
             }
 
@@ -85,7 +126,11 @@ public class EventDAO implements IEventDAO {
 
     @Override
     public void createEvent(Event event) {
-        String sql = "INSERT INTO Events (EventName, EventInfo, EventDate, EndTime, Location, TicketAmount, TicketSold, CoordinatorID) VALUES (?,?,?,?,?,?,?,?)";
+        String sql = """
+            INSERT INTO Events 
+            (EventName, EventInfo, EventDate, EndTime, Location, TicketAmount, TicketsSold, CoordinatorID) 
+            VALUES (?,?,?,?,?,?,?,?)
+        """;
 
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -93,10 +138,10 @@ public class EventDAO implements IEventDAO {
             stmt.setString(1, event.getName());
             stmt.setString(2, event.getInfo());
             stmt.setDate(3, Date.valueOf(event.getDate()));
-            stmt.setTime(4, Time.valueOf(event.getEndTime()));
+            stmt.setTime(4, event.getEndTime() != null ? Time.valueOf(event.getEndTime()) : null);
             stmt.setString(5, event.getLocation());
             stmt.setInt(6, event.getTicketAmount());
-            stmt.setInt(7, event.getTicketSold());
+            stmt.setInt(7, event.getTicketsSold());
             stmt.setInt(8, event.getCoordinatorID());
 
             stmt.executeUpdate();

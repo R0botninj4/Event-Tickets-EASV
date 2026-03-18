@@ -12,11 +12,13 @@ public class Event {
     private LocalTime endTime;
     private String location;
     private int ticketAmount;
-    private int ticketSold;
+    private int ticketsSold;
     private int coordinatorID;
+    private String coordinatorName;
 
     public Event(int id, String name, String info, LocalDate date, LocalTime endTime,
-                 String location, int ticketAmount, int ticketSold, int coordinatorID) {
+                 String location, int ticketAmount, int ticketsSold,
+                 int coordinatorID, String coordinatorName) {
         this.id = id;
         this.name = name;
         this.info = info;
@@ -24,8 +26,9 @@ public class Event {
         this.endTime = endTime;
         this.location = location;
         this.ticketAmount = ticketAmount;
-        this.ticketSold = ticketSold;
+        this.ticketsSold = ticketsSold;
         this.coordinatorID = coordinatorID;
+        this.coordinatorName = coordinatorName;
     }
 
     // --- Getters ---
@@ -33,19 +36,19 @@ public class Event {
     public String getName() { return name; }
     public String getInfo() { return info; }
     public LocalDate getDate() { return date; }
-    public String getEndTime() { return endTime.toString(); }
+    public LocalTime getEndTime() { return endTime; }
+    public String getEndTimeString() { return endTime != null ? endTime.toString() : ""; }
     public String getLocation() { return location; }
     public int getTicketAmount() { return ticketAmount; }
-    public int getTicketSold() { return ticketSold; }
+    public int getTicketsSold() { return ticketsSold; }
     public int getCoordinatorID() { return coordinatorID; }
+    public String getCoordinatorName() { return coordinatorName; } // vigtigt: match TableView!
 
     // --- Computed properties for TableView ---
-    public int getSold() {
-        return ticketSold;
-    }
+    public int getSold() { return ticketsSold; }
 
     public String getStatus() {
-        int left = ticketAmount - ticketSold;
+        int left = ticketAmount - ticketsSold;
         if (left <= 0) return "Sold out";
         return left + " left";
     }

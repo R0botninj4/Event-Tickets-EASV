@@ -127,7 +127,7 @@
                            </HBox.margin>
                         </Label>
                         <Region prefHeight="28.0" prefWidth="81.0" HBox.hgrow="ALWAYS" />
-                        <TextField prefHeight="33.0" prefWidth="233.0" promptText="Search event">
+                        <TextField fx:id="txtSearch" prefHeight="33.0" prefWidth="233.0" promptText="Search event">
                            <cursor>
                               <Cursor fx:constant="DEFAULT" />
                            </cursor>
@@ -135,7 +135,7 @@
                               <Insets bottom="10.0" top="10.0" />
                            </HBox.margin>
                         </TextField>
-                        <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="93.0" text="Filter">
+                        <Button onAction="#handleFilter" mnemonicParsing="false" prefHeight="36.0" prefWidth="93.0" text="Filter">
                            <HBox.margin>
                               <Insets bottom="10.0" right="10.0" top="10.0" />
                            </HBox.margin>
@@ -159,7 +159,7 @@
                         <TableColumn fx:id="colName" prefWidth="97.3333740234375" text="Event name" />
                         <TableColumn fx:id="colDate" prefWidth="76.66668701171875" text="Date" />
                         <TableColumn fx:id="colLocation" prefWidth="82.0" text="Location" />
-                        <TableColumn fx:id="colCoordiantor" prefWidth="81.33331298828125" text="Coordiantor" />
+                        <TableColumn fx:id="colCoordinator" prefWidth="81.33331298828125" text="Coordiantor" />
                         <TableColumn fx:id="colSold" text="Tickets sold" />
                         <TableColumn fx:id="colStatus" prefWidth="126.0" text="Status/Tickets left" />
                         <TableColumn fx:id="colInfo" minWidth="7.99993896484375" prefWidth="110.6666259765625" text="Event info" />
