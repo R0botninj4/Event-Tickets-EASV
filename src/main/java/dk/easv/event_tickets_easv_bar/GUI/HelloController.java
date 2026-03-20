@@ -119,7 +119,7 @@ public class HelloController implements Initializable {
     }
 
     private void loadData() {
-        events = FXCollections.observableArrayList(eventManager.getEvents());
+        events = FXCollections.observableArrayList(eventManager.getAllEvents());
 
         filteredEvents = new FilteredList<>(events, p -> true);
 

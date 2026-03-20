@@ -11,4 +11,7 @@ public interface IEventDAO {
 
     void createEvent(Event event);
 
+    void updateEvent(Event event);
+
+    void deleteEvent(int id);
 }

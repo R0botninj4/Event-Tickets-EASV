@@ -178,4 +178,66 @@ public class EventDAO implements IEventDAO {
             e.printStackTrace();
         }
     }
+    @Override
+    public void updateEvent(Event event) {
+
+        String sql = """
+        UPDATE Events SET
+            EventName = ?,
+            EventInfo = ?,
+            EventDate = ?,
+            EndTime = ?,
+            EndDate = ?,
+            Location = ?,
+            TicketAmount = ?,
+            TicketsSold = ?,
+            CoordinatorID = ?
+        WHERE EventID = ?
+    """;
+
+        try (Connection conn = dbConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, event.getName());
+            stmt.setString(2, event.getInfo());
+            stmt.setDate(3, Date.valueOf(event.getDate()));
+
+            if (event.getEndTime() != null)
+                stmt.setTime(4, Time.valueOf(event.getEndTime()));
+            else
+                stmt.setNull(4, Types.TIME);
+
+            if (event.getEndDate() != null)
+                stmt.setDate(5, Date.valueOf(event.getEndDate()));
+            else
+                stmt.setNull(5, Types.DATE);
+
+            stmt.setString(6, event.getLocation());
+            stmt.setInt(7, event.getTicketAmount());
+            stmt.setInt(8, event.getTicketsSold());
+            stmt.setInt(9, event.getCoordinatorID());
+
+            stmt.setInt(10, event.getId());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void deleteEvent(int id) {
+
+        String sql = "DELETE FROM Events WHERE EventID = ?";
+
+        try (Connection conn = dbConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
