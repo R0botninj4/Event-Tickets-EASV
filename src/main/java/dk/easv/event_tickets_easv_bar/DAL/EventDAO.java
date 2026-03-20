@@ -3,11 +3,11 @@ package dk.easv.event_tickets_easv_bar.DAL;
 import dk.easv.event_tickets_easv_bar.BE.Event;
 import dk.easv.event_tickets_easv_bar.DAL.DB.DBConnector;
 import dk.easv.event_tickets_easv_bar.DAL.Interface.IEventDAO;
-import java.time.LocalTime;
-import java.time.LocalDate;
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +34,7 @@ public class EventDAO implements IEventDAO {
                 e.EventInfo,
                 e.EventDate,
                 e.EndTime,
+                e.EndDate,
                 e.Location,
                 e.TicketAmount,
                 e.TicketsSold,
@@ -48,9 +49,16 @@ public class EventDAO implements IEventDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
+
+                // EndTime
                 LocalTime endTime = null;
                 Time sqlTime = rs.getTime("EndTime");
                 if (sqlTime != null) endTime = sqlTime.toLocalTime();
+
+                // EndDate
+                LocalDate endDate = null;
+                Date sqlEndDate = rs.getDate("EndDate");
+                if (sqlEndDate != null) endDate = sqlEndDate.toLocalDate();
 
                 events.add(new Event(
                         rs.getInt("EventID"),
@@ -62,7 +70,8 @@ public class EventDAO implements IEventDAO {
                         rs.getInt("TicketAmount"),
                         rs.getInt("TicketsSold"),
                         rs.getInt("CoordinatorID"),
-                        rs.getString("CoordinatorName")
+                        rs.getString("CoordinatorName"),
+                        endDate
                 ));
             }
 
@@ -75,13 +84,15 @@ public class EventDAO implements IEventDAO {
 
     @Override
     public Event getEventById(int id) {
+
         String sql = """
-            SELECT 
+            SELECT
                 e.EventID,
                 e.EventName,
                 e.EventInfo,
                 e.EventDate,
                 e.EndTime,
+                e.EndDate,
                 e.Location,
                 e.TicketAmount,
                 e.TicketsSold,
@@ -99,9 +110,16 @@ public class EventDAO implements IEventDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
+
+                // EndTime
                 LocalTime endTime = null;
                 Time sqlTime = rs.getTime("EndTime");
                 if (sqlTime != null) endTime = sqlTime.toLocalTime();
+
+                // EndDate
+                LocalDate endDate = null;
+                Date sqlEndDate = rs.getDate("EndDate");
+                if (sqlEndDate != null) endDate = sqlEndDate.toLocalDate();
 
                 return new Event(
                         rs.getInt("EventID"),
@@ -113,7 +131,8 @@ public class EventDAO implements IEventDAO {
                         rs.getInt("TicketAmount"),
                         rs.getInt("TicketsSold"),
                         rs.getInt("CoordinatorID"),
-                        rs.getString("CoordinatorName")
+                        rs.getString("CoordinatorName"),
+                        endDate
                 );
             }
 
@@ -126,10 +145,11 @@ public class EventDAO implements IEventDAO {
 
     @Override
     public void createEvent(Event event) {
+
         String sql = """
             INSERT INTO Events 
-            (EventName, EventInfo, EventDate, EndTime, Location, TicketAmount, TicketsSold, CoordinatorID) 
-            VALUES (?,?,?,?,?,?,?,?)
+            (EventName, EventInfo, EventDate, EndTime, EndDate, Location, TicketAmount, TicketsSold, CoordinatorID) 
+            VALUES (?,?,?,?,?,?,?,?,?)
         """;
 
         try (Connection conn = dbConnector.getConnection();
@@ -138,11 +158,23 @@ public class EventDAO implements IEventDAO {
             stmt.setString(1, event.getName());
             stmt.setString(2, event.getInfo());
             stmt.setDate(3, Date.valueOf(event.getDate()));
-            stmt.setTime(4, event.getEndTime() != null ? Time.valueOf(event.getEndTime()) : null);
-            stmt.setString(5, event.getLocation());
-            stmt.setInt(6, event.getTicketAmount());
-            stmt.setInt(7, event.getTicketsSold());
-            stmt.setInt(8, event.getCoordinatorID());
+
+            // EndTime
+            if (event.getEndTime() != null)
+                stmt.setTime(4, Time.valueOf(event.getEndTime()));
+            else
+                stmt.setNull(4, Types.TIME);
+
+            // EndDate
+            if (event.getEndDate() != null)
+                stmt.setDate(5, Date.valueOf(event.getEndDate()));
+            else
+                stmt.setNull(5, Types.DATE);
+
+            stmt.setString(6, event.getLocation());
+            stmt.setInt(7, event.getTicketAmount());
+            stmt.setInt(8, event.getTicketsSold());
+            stmt.setInt(9, event.getCoordinatorID());
 
             stmt.executeUpdate();
 
