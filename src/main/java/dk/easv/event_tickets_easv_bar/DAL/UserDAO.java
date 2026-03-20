@@ -19,55 +19,63 @@ public class UserDAO implements IUserDAO {
         }
     }
 
+    // 🔐 LOGIN
     @Override
     public User login(String username, String password) {
 
-        String sql = "SELECT UserID, Username, RoleInt FROM Users WHERE Username=? AND PasswordHash=?";
+        String sql = "SELECT * FROM Users WHERE Username=? AND PasswordHash=?";
 
-        try(Connection conn = dbConnector.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)){
+        try (Connection conn = dbConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1,username);
-            stmt.setString(2,password);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
 
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 return new User(
                         rs.getInt("UserID"),
                         rs.getString("Username"),
+                        rs.getString("Name"),
+                        rs.getString("Email"),
+                        rs.getString("PhoneNumber"),
                         rs.getInt("RoleInt")
                 );
             }
 
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return null;
     }
 
+    // 🔍 GET USER BY ID
     @Override
     public User getUserById(int id) {
 
-        String sql = "SELECT UserID, Username, RoleInt FROM Users WHERE UserID=?";
+        String sql = "SELECT * FROM Users WHERE UserID=?";
 
-        try(Connection conn = dbConnector.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)){
+        try (Connection conn = dbConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1,id);
+            stmt.setInt(1, id);
 
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 return new User(
                         rs.getInt("UserID"),
                         rs.getString("Username"),
+                        rs.getString("Name"),
+                        rs.getString("Email"),
+                        rs.getString("PhoneNumber"),
                         rs.getInt("RoleInt")
                 );
             }
 
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -76,25 +84,33 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public int addUser(String username, String password, int role) {
+        return 0;
+    }
 
-        String sql = "INSERT INTO Users (Username,PasswordHash,RoleInt) VALUES (?,?,?)";
+    // ➕ CREATE USER (rigtige data, ikke midlertidige værdier)
+    public int addUser(String username, String password, String name, String email, String phone, int role) {
 
-        try(Connection conn = dbConnector.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
+        String sql = "INSERT INTO Users (Username, PasswordHash, RoleInt, Name, Email, PhoneNumber) VALUES (?,?,?,?,?,?)";
 
-            stmt.setString(1,username);
-            stmt.setString(2,password);
-            stmt.setInt(3,role);
+        try (Connection conn = dbConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.setInt(3, role);
+            stmt.setString(4, name);
+            stmt.setString(5, email);
+            stmt.setString(6, phone);
 
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();
 
-            if(rs.next()){
-                return rs.getInt(1);
+            if (rs.next()) {
+                return rs.getInt(1); // returner ny brugerID
             }
 
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 

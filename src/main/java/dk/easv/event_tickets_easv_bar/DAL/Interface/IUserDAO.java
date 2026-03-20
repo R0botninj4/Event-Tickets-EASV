@@ -9,5 +9,4 @@ public interface IUserDAO {
     User getUserById(int id);
 
     int addUser(String username, String password, int role);
-
 }
