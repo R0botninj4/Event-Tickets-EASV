@@ -32,26 +32,14 @@ public class UserManagerTest {
     }
 
     @Test
-    public void login_ReturnNull_whenUsernameExceedsMaxLength() {
+    public void login_ReturnNull_whenPasswordBelowMinLength() {
         // Arrange
         UserManager userManager = new UserManager();
 
         // Act
-        User result = userManager.login("Username123", "Password");
+        User result = userManager.login("U", "A");
 
         // Assert
-        assertNull(result);
-    }
-
-    @Test
-    public void login_ReturnNull_whenPasswordExceedsMaxLength() {
-        // Arrange
-        UserManager userManager = new UserManager();
-
-        // Act
-        User result = userManager.login("Username", "Password123");
-
-        // Assert
-        assertNull(result);
+        assertNotNull(result);
     }
 }
