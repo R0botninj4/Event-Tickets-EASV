@@ -6,6 +6,8 @@ import dk.easv.event_tickets_easv_bar.DAL.Interface.IUserDAO;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO implements IUserDAO {
 
@@ -19,7 +21,6 @@ public class UserDAO implements IUserDAO {
         }
     }
 
-    // 🔐 LOGIN
     @Override
     public User login(String username, String password) {
 
@@ -51,7 +52,6 @@ public class UserDAO implements IUserDAO {
         return null;
     }
 
-    // 🔍 GET USER BY ID
     @Override
     public User getUserById(int id) {
 
@@ -82,15 +82,40 @@ public class UserDAO implements IUserDAO {
         return null;
     }
 
+    // ✅ GET ALL USERS (used for ComboBox)
     @Override
-    public int addUser(String username, String password, int role) {
-        return 0;
+    public List<User> getAllUsers() {
+
+        List<User> users = new ArrayList<>();
+
+        String sql = "SELECT * FROM Users";
+
+        try (Connection conn = dbConnector.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                users.add(new User(
+                        rs.getInt("UserID"),
+                        rs.getString("Username"),
+                        rs.getString("Name"),
+                        rs.getString("Email"),
+                        rs.getString("PhoneNumber"),
+                        rs.getInt("RoleInt")
+                ));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
     }
 
-    // ➕ CREATE USER (rigtige data, ikke midlertidige værdier)
-    public int addUser(String username, String password, String name, String email, String phone, int role) {
+    @Override
+    public int addUser(String username, String password, int role) {
 
-        String sql = "INSERT INTO Users (Username, PasswordHash, RoleInt, Name, Email, PhoneNumber) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO Users (Username, PasswordHash, RoleInt) VALUES (?,?,?)";
 
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -98,16 +123,13 @@ public class UserDAO implements IUserDAO {
             stmt.setString(1, username);
             stmt.setString(2, password);
             stmt.setInt(3, role);
-            stmt.setString(4, name);
-            stmt.setString(5, email);
-            stmt.setString(6, phone);
 
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();
 
             if (rs.next()) {
-                return rs.getInt(1); // returner ny brugerID
+                return rs.getInt(1);
             }
 
         } catch (SQLException e) {

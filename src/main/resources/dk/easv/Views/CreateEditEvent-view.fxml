@@ -13,6 +13,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <BorderPane stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.CreateEditEvent">
    <top>
       <VBox spacing="10">
@@ -52,17 +54,20 @@
             <TextField promptText="Search event" />
             <Separator />
             <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Event creation" />
-            <TextField promptText="Event Name" />
-            <TextField promptText="Date" />
-            <TextField promptText="Location" />
-            <TextField promptText="Coordinator" />
-            <TextField promptText="Ticket amount" />
-            <TextField promptText="Info" />
-            <TextField promptText="End date" />
-            <TextField promptText="End time" />
-            <TextField promptText="Location guidance" />
+             <TextField fx:id="txtName" promptText="Event Name" />
+             <DatePicker fx:id="dpDate" promptText="Select date" />
+             <TextField fx:id="txtLocation" promptText="Location" />
+             <ComboBox fx:id="cbCoordinator" promptText="Select Coordinator" />
+             <TextField fx:id="txtTicketAmount" promptText="Ticket amount" />
+             <TextField fx:id="txtInfo" promptText="Info" />
+             <DatePicker fx:id="dpEndDate" promptText="End date" />
+             <HBox spacing="5">
+                 <ComboBox fx:id="cbHour" prefWidth="70" promptText="HH"/>
+                 <ComboBox fx:id="cbMinute" prefWidth="70" promptText="MM"/>
+             </HBox>
+             <TextField fx:id="txtLocationGuidance" promptText="Location guidance" />
             <Separator />
-            <Button maxWidth="Infinity" text="Add Event" />
+             <Button fx:id="addButton" onAction="#handleAddEvent" maxWidth="Infinity" text="Add Event" />
             <Separator prefHeight="49.0" prefWidth="280.0" />
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="287.0" text="Selected Event" />
             <Button maxWidth="Infinity" text="Edit Event" />
@@ -74,15 +79,15 @@
       </VBox>
    </right>
    <center>
-      <TableView prefHeight="499.0" prefWidth="809.0" styleClass="cBoarder" BorderPane.alignment="CENTER">
+      <TableView fx:id="eventTable" prefHeight="499.0" prefWidth="809.0" styleClass="cBoarder" BorderPane.alignment="CENTER">
          <columns>
-            <TableColumn prefWidth="97.3333740234375" text="Event name" />
-            <TableColumn prefWidth="76.66668701171875" text="Date" />
-            <TableColumn prefWidth="82.0" text="Location" />
-            <TableColumn prefWidth="81.33331298828125" text="Coordiantor" />
-            <TableColumn prefWidth="131.33334350585938" text="Status/Tickets left" />
-            <TableColumn prefWidth="123.33331298828125" text="Tickets sold" />
-            <TableColumn minWidth="7.99993896484375" prefWidth="110.6666259765625" text="Event info" />
+             <TableColumn fx:id="colName" text="Event name" />
+             <TableColumn fx:id="colDate" text="Date" />
+             <TableColumn fx:id="colLocation" text="Location" />
+             <TableColumn fx:id="colCoordinator" text="Coordinator" />
+             <TableColumn fx:id="colStatus" text="Status/Tickets left" />
+             <TableColumn fx:id="colTicketsSold" text="Tickets sold" />
+             <TableColumn fx:id="colInfo" text="Event info" />
          </columns>
          <BorderPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" />

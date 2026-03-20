@@ -4,6 +4,8 @@ import dk.easv.event_tickets_easv_bar.BE.User;
 import dk.easv.event_tickets_easv_bar.DAL.Interface.IUserDAO;
 import dk.easv.event_tickets_easv_bar.DAL.UserDAO;
 
+import java.util.List;
+
 public class UserManager {
 
     private final IUserDAO userDAO;
@@ -22,6 +24,11 @@ public class UserManager {
 
     public User getUserById(int id) {
         return userDAO.getUserById(id);
+    }
+
+    // ✅ ADD THIS
+    public List<User> getAllUsers() {
+        return userDAO.getAllUsers();
     }
 
     public int addUser(String username, String password, int role) {

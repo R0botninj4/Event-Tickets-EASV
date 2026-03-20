@@ -10,8 +10,9 @@ public class Event {
     private String info;
     private LocalDate date;
     private LocalTime endTime;
-    private LocalDate endDate; // FIXED
+    private LocalDate endDate;
     private String location;
+    private String locationGuidance; // ✅ NEW
     private int ticketAmount;
     private int ticketsSold;
     private int coordinatorID;
@@ -34,6 +35,8 @@ public class Event {
         this.coordinatorName = coordinatorName;
     }
 
+    // ---------------- GETTERS ----------------
+
     public int getId() { return id; }
     public String getName() { return name; }
     public String getInfo() { return info; }
@@ -45,6 +48,17 @@ public class Event {
     public int getTicketsSold() { return ticketsSold; }
     public int getCoordinatorID() { return coordinatorID; }
     public String getCoordinatorName() { return coordinatorName; }
+
+    // ✅ NEW
+    public String getLocationGuidance() {
+        return locationGuidance;
+    }
+
+    public void setLocationGuidance(String locationGuidance) {
+        this.locationGuidance = locationGuidance;
+    }
+
+    // ---------------- STATUS ----------------
 
     public String getStatus() {
         int left = ticketAmount - ticketsSold;
