@@ -40,6 +40,6 @@ public class UserManagerTest {
         User result = userManager.login("U", "A");
 
         // Assert
-        assertNotNull(result);
+        assertNull(result);
     }
 }

@@ -8,13 +8,21 @@ import java.util.List;
 
 public class EventManager {
 
-    private IEventDAO eventDAO;
+    private final IEventDAO eventDAO;
 
     public EventManager() {
         eventDAO = new EventDAO();
     }
 
-    public List<Event> getEvents(){
+    public List<Event> getEvents() {
         return eventDAO.getAllEvents();
+    }
+
+    public Event getEventById(int id) {
+        return eventDAO.getEventById(id);
+    }
+
+    public void createEvent(Event event) {
+        eventDAO.createEvent(event);
     }
 }

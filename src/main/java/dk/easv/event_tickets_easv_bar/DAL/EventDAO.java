@@ -28,7 +28,7 @@ public class EventDAO implements IEventDAO {
         List<Event> events = new ArrayList<>();
 
         String sql = """
-            SELECT 
+            SELECT
                 e.EventID,
                 e.EventName,
                 e.EventInfo,
@@ -66,12 +66,12 @@ public class EventDAO implements IEventDAO {
                         rs.getString("EventInfo"),
                         rs.getDate("EventDate").toLocalDate(),
                         endTime,
+                        endDate,
                         rs.getString("Location"),
                         rs.getInt("TicketAmount"),
                         rs.getInt("TicketsSold"),
                         rs.getInt("CoordinatorID"),
-                        rs.getString("CoordinatorName"),
-                        endDate
+                        rs.getString("CoordinatorName")
                 ));
             }
 
@@ -111,12 +111,10 @@ public class EventDAO implements IEventDAO {
 
             if (rs.next()) {
 
-                // EndTime
                 LocalTime endTime = null;
                 Time sqlTime = rs.getTime("EndTime");
                 if (sqlTime != null) endTime = sqlTime.toLocalTime();
 
-                // EndDate
                 LocalDate endDate = null;
                 Date sqlEndDate = rs.getDate("EndDate");
                 if (sqlEndDate != null) endDate = sqlEndDate.toLocalDate();
@@ -127,12 +125,12 @@ public class EventDAO implements IEventDAO {
                         rs.getString("EventInfo"),
                         rs.getDate("EventDate").toLocalDate(),
                         endTime,
+                        endDate,
                         rs.getString("Location"),
                         rs.getInt("TicketAmount"),
                         rs.getInt("TicketsSold"),
                         rs.getInt("CoordinatorID"),
-                        rs.getString("CoordinatorName"),
-                        endDate
+                        rs.getString("CoordinatorName")
                 );
             }
 
@@ -159,13 +157,11 @@ public class EventDAO implements IEventDAO {
             stmt.setString(2, event.getInfo());
             stmt.setDate(3, Date.valueOf(event.getDate()));
 
-            // EndTime
             if (event.getEndTime() != null)
                 stmt.setTime(4, Time.valueOf(event.getEndTime()));
             else
                 stmt.setNull(4, Types.TIME);
 
-            // EndDate
             if (event.getEndDate() != null)
                 stmt.setDate(5, Date.valueOf(event.getEndDate()));
             else

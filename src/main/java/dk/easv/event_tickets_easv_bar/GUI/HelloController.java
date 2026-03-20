@@ -111,7 +111,7 @@ public class HelloController implements Initializable {
         colLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
         colInfo.setCellValueFactory(new PropertyValueFactory<>("info"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
-        colSold.setCellValueFactory(new PropertyValueFactory<>("sold"));
+        colSold.setCellValueFactory(new PropertyValueFactory<>("ticketsSold"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colCoordinator.setCellValueFactory(new PropertyValueFactory<>("coordinatorName"));
 
