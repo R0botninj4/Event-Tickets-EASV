@@ -17,6 +17,7 @@ public class UserManager{
 
         if(username == null || username.isEmpty()) return null;
         if(password == null || password.isEmpty()) return null;
+        if (username.length() > 8 || password.length() > 8) return null;
 
         return userDAO.login(username, password);
     }
@@ -28,6 +29,7 @@ public class UserManager{
 
 
     public int addUser(String username, String password, int role) {
+        if (username.length() > 8 || password.length() > 8) return -1;
         return userDAO.addUser(username,password,role);
     }
 }
