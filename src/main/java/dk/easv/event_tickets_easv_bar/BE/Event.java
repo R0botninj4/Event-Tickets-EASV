@@ -31,7 +31,7 @@ public class Event {
         this.ticketsSold = ticketsSold;
         this.coordinatorID = coordinatorID;
         this.coordinatorName = coordinatorName;
-        this.endDate = endDate; // ✅ NOW USED
+        this.endDate = endDate;
     }
 
     // --- Getters ---
