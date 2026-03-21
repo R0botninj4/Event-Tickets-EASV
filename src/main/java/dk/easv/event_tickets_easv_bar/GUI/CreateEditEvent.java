@@ -18,7 +18,7 @@ public class CreateEditEvent implements ClosableWindow {
     @FXML private Button closeButton;
 
     @FXML private TableView<Event> eventTable;
-
+    @FXML private TextField txtSearch;
     @FXML private TableColumn<Event, String> colName;
     @FXML private TableColumn<Event, LocalDate> colDate;
     @FXML private TableColumn<Event, String> colLocation;
@@ -56,6 +56,7 @@ public class CreateEditEvent implements ClosableWindow {
         loadEvents();
         loadCoordinators();
         loadTimeOptions();
+        setupSearch();
     }
 
     // ---------------- TABLE ----------------
@@ -315,6 +316,49 @@ public class CreateEditEvent implements ClosableWindow {
         cbMinute.setValue(null);
 
         selectedEvent = null;
+    }
+
+    @FXML
+    private void handleDeleteEvent() {
+
+        Event selected = eventTable.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            showAlert("Error", "Select an event to delete");
+            return;
+        }
+
+        // Confirm dialog
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete Event");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Are you sure you want to delete this event?");
+
+        if (confirm.showAndWait().get() == ButtonType.OK) {
+
+            eventManager.deleteEvent(selected.getId());
+
+            loadEvents();
+            clearFields();
+        }
+    }
+
+    private void setupSearch() {
+
+        txtSearch.textProperty().addListener((obs, oldVal, newVal) -> {
+
+            String search = newVal.toLowerCase();
+
+            eventTable.setItems(FXCollections.observableArrayList(
+                    eventManager.getAllEvents().stream()
+                            .filter(e ->
+                                    e.getName().toLowerCase().contains(search) ||
+                                            e.getLocation().toLowerCase().contains(search) ||
+                                            e.getCoordinatorName().toLowerCase().contains(search)
+                            )
+                            .toList()
+            ));
+        });
     }
 
     // ---------------- CLOSE ----------------
