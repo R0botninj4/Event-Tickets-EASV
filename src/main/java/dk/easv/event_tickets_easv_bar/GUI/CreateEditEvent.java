@@ -31,18 +31,20 @@ public class CreateEditEvent implements ClosableWindow {
     @FXML private TextField txtInfo;
     @FXML private TextField txtLocation;
     @FXML private TextField txtTicketAmount;
-    @FXML private TextField txtLocationGuidance; // ✅ NEW
+    @FXML private TextField txtLocationGuidance;
 
     @FXML private DatePicker dpDate;
     @FXML private DatePicker dpEndDate;
 
     @FXML private ComboBox<User> cbCoordinator;
-
     @FXML private ComboBox<Integer> cbHour;
     @FXML private ComboBox<Integer> cbMinute;
 
+    // ---------------- DATA ----------------
     private EventManager eventManager = new EventManager();
     private UserManager userManager = new UserManager();
+
+    private Event selectedEvent; // used for editing
 
     // ---------------- INIT ----------------
     @FXML
@@ -54,43 +56,6 @@ public class CreateEditEvent implements ClosableWindow {
         loadEvents();
         loadCoordinators();
         loadTimeOptions();
-    }
-
-    // ---------------- TIME ----------------
-    private void loadTimeOptions() {
-
-        cbHour.setItems(FXCollections.observableArrayList(
-                0,1,2,3,4,5,6,7,8,9,10,11,
-                12,13,14,15,16,17,18,19,20,21,22,23
-        ));
-
-        cbMinute.setItems(FXCollections.observableArrayList(
-                0,15,30,45
-        ));
-    }
-
-    // ---------------- COORDINATORS ----------------
-    private void loadCoordinators() {
-
-        cbCoordinator.setItems(FXCollections.observableArrayList(
-                userManager.getAllUsers()
-        ));
-
-        cbCoordinator.setCellFactory(list -> new ListCell<>() {
-            @Override
-            protected void updateItem(User user, boolean empty) {
-                super.updateItem(user, empty);
-                setText(empty || user == null ? null : user.getName());
-            }
-        });
-
-        cbCoordinator.setButtonCell(new ListCell<>() {
-            @Override
-            protected void updateItem(User user, boolean empty) {
-                super.updateItem(user, empty);
-                setText(empty || user == null ? null : user.getName());
-            }
-        });
     }
 
     // ---------------- TABLE ----------------
@@ -118,11 +83,76 @@ public class CreateEditEvent implements ClosableWindow {
                 new javafx.beans.property.SimpleStringProperty(c.getValue().getInfo()));
     }
 
-    // ---------------- LOAD EVENTS ----------------
+    // ---------------- LOAD ----------------
     private void loadEvents() {
         eventTable.setItems(FXCollections.observableArrayList(
                 eventManager.getAllEvents()
         ));
+    }
+
+    private void loadCoordinators() {
+
+        cbCoordinator.setItems(FXCollections.observableArrayList(
+                userManager.getAllUsers()
+        ));
+
+        cbCoordinator.setCellFactory(list -> new ListCell<>() {
+            @Override
+            protected void updateItem(User user, boolean empty) {
+                super.updateItem(user, empty);
+                setText(empty || user == null ? null : user.getName());
+            }
+        });
+
+        cbCoordinator.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(User user, boolean empty) {
+                super.updateItem(user, empty);
+                setText(empty || user == null ? null : user.getName());
+            }
+        });
+    }
+
+    private void loadTimeOptions() {
+
+        cbHour.setItems(FXCollections.observableArrayList(
+                0,1,2,3,4,5,6,7,8,9,10,11,
+                12,13,14,15,16,17,18,19,20,21,22,23
+        ));
+
+        cbMinute.setItems(FXCollections.observableArrayList(
+                0,15,30,45
+        ));
+    }
+
+    // ---------------- FILL FORM ----------------
+    private void fillForm(Event event) {
+
+        txtName.setText(event.getName());
+        txtInfo.setText(event.getInfo());
+        txtLocation.setText(event.getLocation());
+        txtTicketAmount.setText(String.valueOf(event.getTicketAmount()));
+        txtLocationGuidance.setText(event.getLocationGuidance());
+
+        dpDate.setValue(event.getDate());
+        dpEndDate.setValue(event.getEndDate());
+
+        // Coordinator
+        for (User user : cbCoordinator.getItems()) {
+            if (user.getId() == event.getCoordinatorID()) {
+                cbCoordinator.setValue(user);
+                break;
+            }
+        }
+
+        // Time
+        if (event.getEndTime() != null) {
+            cbHour.setValue(event.getEndTime().getHour());
+            cbMinute.setValue(event.getEndTime().getMinute());
+        } else {
+            cbHour.setValue(null);
+            cbMinute.setValue(null);
+        }
     }
 
     // ---------------- ALERT ----------------
@@ -158,7 +188,7 @@ public class CreateEditEvent implements ClosableWindow {
             }
 
             if (cbCoordinator.getValue() == null) {
-                showAlert("Error", "Coordinator is required");
+                showAlert("Error", "Select a coordinator");
                 return;
             }
 
@@ -192,7 +222,6 @@ public class CreateEditEvent implements ClosableWindow {
                     user.getName()
             );
 
-            // ✅ LOCATION GUIDANCE
             event.setLocationGuidance(txtLocationGuidance.getText());
 
             eventManager.createEvent(event);
@@ -203,6 +232,69 @@ public class CreateEditEvent implements ClosableWindow {
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Something went wrong");
+        }
+    }
+
+    // ---------------- EDIT BUTTON ----------------
+    @FXML
+    private void handleEditEvent() {
+
+        Event selected = eventTable.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            showAlert("Error", "Select an event first");
+            return;
+        }
+
+        selectedEvent = selected;
+        fillForm(selected);
+    }
+
+    // ---------------- UPDATE EVENT ----------------
+    @FXML
+    private void handleUpdateEvent() {
+
+        if (selectedEvent == null) {
+            showAlert("Error", "Press Edit first");
+            return;
+        }
+
+        try {
+
+            int tickets = Integer.parseInt(txtTicketAmount.getText());
+
+            LocalTime endTime = null;
+            if (cbHour.getValue() != null && cbMinute.getValue() != null) {
+                endTime = LocalTime.of(cbHour.getValue(), cbMinute.getValue());
+            }
+
+            User user = cbCoordinator.getValue();
+
+            Event updatedEvent = new Event(
+                    selectedEvent.getId(),
+                    txtName.getText(),
+                    txtInfo.getText(),
+                    dpDate.getValue(),
+                    endTime,
+                    dpEndDate.getValue(),
+                    txtLocation.getText(),
+                    tickets,
+                    selectedEvent.getTicketsSold(),
+                    user.getId(),
+                    user.getName()
+            );
+
+            updatedEvent.setLocationGuidance(txtLocationGuidance.getText());
+
+            eventManager.updateEvent(updatedEvent);
+
+            loadEvents();
+            clearFields();
+            selectedEvent = null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Update failed");
         }
     }
 
@@ -221,6 +313,8 @@ public class CreateEditEvent implements ClosableWindow {
         cbCoordinator.setValue(null);
         cbHour.setValue(null);
         cbMinute.setValue(null);
+
+        selectedEvent = null;
     }
 
     // ---------------- CLOSE ----------------

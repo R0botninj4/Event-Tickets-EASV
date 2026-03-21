@@ -70,8 +70,8 @@
              <Button fx:id="addButton" onAction="#handleAddEvent" maxWidth="Infinity" text="Add Event" />
             <Separator prefHeight="49.0" prefWidth="280.0" />
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="287.0" text="Selected Event" />
-            <Button maxWidth="Infinity" text="Edit Event" />
-            <Button maxWidth="Infinity" text="Update Event" />
+            <Button maxWidth="Infinity" text="Edit Event" onAction="#handleEditEvent"/>
+            <Button maxWidth="Infinity" text="Update Event" onAction="#handleUpdateEvent"/>
          </children>
          <BorderPane.margin>
             <Insets bottom="10.0" right="10.0" />

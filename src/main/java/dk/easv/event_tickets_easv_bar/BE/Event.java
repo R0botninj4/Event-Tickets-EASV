@@ -12,7 +12,7 @@ public class Event {
     private LocalTime endTime;
     private LocalDate endDate;
     private String location;
-    private String locationGuidance; // ✅ NEW
+    private String locationGuidance;
     private int ticketAmount;
     private int ticketsSold;
     private int coordinatorID;
@@ -48,11 +48,7 @@ public class Event {
     public int getTicketsSold() { return ticketsSold; }
     public int getCoordinatorID() { return coordinatorID; }
     public String getCoordinatorName() { return coordinatorName; }
-
-    // ✅ NEW
-    public String getLocationGuidance() {
-        return locationGuidance;
-    }
+    public String getLocationGuidance() {return locationGuidance;}
 
     public void setLocationGuidance(String locationGuidance) {
         this.locationGuidance = locationGuidance;
