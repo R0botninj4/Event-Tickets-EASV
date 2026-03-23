@@ -50,24 +50,23 @@
             <Insets bottom="10" left="10" right="10" top="10" />
          </padding>
          <children>
-            <TextField promptText="Search event" />
+            <TextField fx:id="txtSearch" promptText="Search event" />
             <Separator />
             <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Ticket creation" />
-            <TextField promptText="Event Name" />
-            <TextField promptText="Date" />
-            <TextField promptText="Location" />
+            <TextField fx:id="txtEventName" promptText="Event Name" editable="false" />
+            <TextField fx:id="txtDate" promptText="Date" editable="false"/>
+            <TextField fx:id="txtLocation" promptText="Location" editable="false" />
             <TextField promptText="Customer name" />
             <TextField promptText="Customer Phone number" />
-            <TextField promptText="Ticket amount" />
-            <TextField promptText="Coordinator" />
-            <ComboBox prefHeight="25.0" prefWidth="288.0" promptText="What kind of ticket" />
+            <TextField fx:id="txtAmount" promptText="Ticket amount" />
+            <ComboBox fx:id="comboTicketType" prefHeight="25.0" prefWidth="288.0" promptText="What kind of ticket" />
             <Separator />
-            <TextField promptText="E-mail" />
+            <TextField fx:id="txtEmail" promptText="E-mail" />
             <Separator prefHeight="9.0" prefWidth="280.0" />
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="287.0" text="Selected Event" />
             <Separator prefWidth="200.0" />
-            <Button maxWidth="Infinity" text="Send ticket" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Print ticket" />
+            <Button fx:id="sendTicketBtn" onAction="#handleSendTicket" maxWidth="Infinity" text="Send ticket" />
+            <Button fx:id="PrintTicketBtn" onAction="#handlePrintTicket" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Print ticket" />
          </children>
          <BorderPane.margin>
             <Insets bottom="10.0" right="10.0" />
@@ -75,15 +74,15 @@
       </VBox>
    </right>
    <center>
-      <TableView prefHeight="499.0" prefWidth="809.0" styleClass="cBoarder" BorderPane.alignment="CENTER">
+      <TableView fx:id="eventTable" prefHeight="499.0" prefWidth="809.0" styleClass="cBoarder" BorderPane.alignment="CENTER">
          <columns>
-            <TableColumn prefWidth="97.3333740234375" text="Event name" />
-            <TableColumn prefWidth="76.66668701171875" text="Date" />
-            <TableColumn prefWidth="82.0" text="Location" />
-            <TableColumn prefWidth="81.33331298828125" text="Coordiantor" />
-            <TableColumn prefWidth="125.99996948242188" text="Status/Tickets left" />
-            <TableColumn prefWidth="128.66668701171875" text="Tickets sold" />
-            <TableColumn minWidth="7.99993896484375" prefWidth="110.6666259765625" text="Event info" />
+            <TableColumn fx:id="colName" prefWidth="97.3333740234375" text="Event name" />
+            <TableColumn fx:id="colDate" prefWidth="76.66668701171875" text="Date" />
+            <TableColumn fx:id="colLocation" prefWidth="82.0" text="Location" />
+            <TableColumn fx:id="colCoordinator" prefWidth="81.33331298828125" text="Coordiantor" />
+            <TableColumn fx:id="colTicketsLeft" prefWidth="125.99996948242188" text="Status/Tickets left" />
+            <TableColumn fx:id="colTicketsSold" prefWidth="128.66668701171875" text="Tickets sold" />
+            <TableColumn fx:id="colInfo" minWidth="7.99993896484375" prefWidth="110.6666259765625" text="Event info" />
          </columns>
          <BorderPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" />
