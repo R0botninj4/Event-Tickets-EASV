@@ -9,7 +9,11 @@ public interface IUserDAO {
 
     User getUserById(int id);
 
-    List<User> getAllUsers();   // ✅ ADD THIS
+    List<User> getAllUsers();
 
-    int addUser(String username, String password, int role);
+    boolean deleteUser(int userId);
+    boolean updateUser(int userId, String username, String name, String email, String phoneNumber, int role);
+
+    // Updated to include full name
+    int addUser(String username, String password, String name, String email, String phoneNumber, int role);
 }

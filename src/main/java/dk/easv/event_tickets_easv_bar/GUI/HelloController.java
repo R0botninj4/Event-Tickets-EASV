@@ -68,9 +68,9 @@ public class HelloController implements Initializable {
         // Login / Session setup
         loggedInUser = Session.getUser();
         if (loggedInUser != null) {
-            if (loggedInUser.getRole() == 1) {
+            if (loggedInUser.getRoleInt() == 1) {
                 lblUserRole.setText("Admin");
-            } else if (loggedInUser.getRole() == 2) {
+            } else if (loggedInUser.getRoleInt() == 2) {
                 lblUserRole.setText("Coordinator");
                 btnManageUsers.setVisible(false);
                 btnManageUsers.setManaged(false);

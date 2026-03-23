@@ -31,11 +31,19 @@ public class UserManager {
         return userDAO.getAllUsers();
     }
 
-    public int addUser(String username, String password, int role) {
-
-        if (username == null || username.isEmpty()) return -1;
+    public int addUser(String username, String password, String name, String email, String phoneNumber, int role) {
+        if (username == null || username.isBlank()) return -1;
+        if (name == null || name.isBlank()) return -1;
         if (password == null || password.length() < 4) return -1;
 
-        return userDAO.addUser(username, password, role);
+        return userDAO.addUser(username, password, name, email, phoneNumber, role);
+    }
+
+    public boolean deleteUser(int userId) {
+        return userDAO.deleteUser(userId);
+    }
+    public boolean updateUser(User user) {
+        if (user == null) return false;
+        return userDAO.updateUser(user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getPhoneNumber(), user.getRoleInt());
     }
 }

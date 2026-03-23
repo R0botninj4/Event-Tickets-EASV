@@ -31,7 +31,7 @@ public class EventController implements ClosableWindow {
         // Set role label from session
         User loggedInUser = Session.getUser();
         if (loggedInUser != null) {
-            lblUserRole.setText(loggedInUser.getRole() == 1 ? "Admin" : "Coordinator");
+            lblUserRole.setText(loggedInUser.getRoleInt() == 1 ? "Admin" : "Coordinator");
         }
     }
 

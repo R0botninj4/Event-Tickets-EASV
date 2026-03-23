@@ -23,15 +23,12 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public User login(String username, String password) {
-
         String sql = "SELECT * FROM Users WHERE Username=? AND PasswordHash=?";
-
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
             stmt.setString(2, password);
-
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -48,20 +45,16 @@ public class UserDAO implements IUserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
     @Override
     public User getUserById(int id) {
-
         String sql = "SELECT * FROM Users WHERE UserID=?";
-
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
-
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -78,16 +71,12 @@ public class UserDAO implements IUserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
-    // ✅ GET ALL USERS (used for ComboBox)
     @Override
     public List<User> getAllUsers() {
-
         List<User> users = new ArrayList<>();
-
         String sql = "SELECT * FROM Users";
 
         try (Connection conn = dbConnector.getConnection();
@@ -108,34 +97,78 @@ public class UserDAO implements IUserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return users;
     }
 
+    // ✅ Updated addUser with email & phoneNumber
     @Override
-    public int addUser(String username, String password, int role) {
+    public int addUser(String username, String password, String name, String email, String phoneNumber, int role) {
+        String roleText = switch (role) {
+            case 1 -> "Admin";
+            case 2 -> "Coordinator";
+            default -> "Customer";
+        };
 
-        String sql = "INSERT INTO Users (Username, PasswordHash, RoleInt) VALUES (?,?,?)";
+        String sql = "INSERT INTO Users (Username, Name, Email, PhoneNumber, PasswordHash, RoleInt, Role) VALUES (?,?,?,?,?,?,?)";
 
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, username);
-            stmt.setString(2, password);
-            stmt.setInt(3, role);
+            stmt.setString(2, name);
+            stmt.setString(3, email);
+            stmt.setString(4, phoneNumber);
+            stmt.setString(5, password);
+            stmt.setInt(6, role);
+            stmt.setString(7, roleText);
 
             stmt.executeUpdate();
-
             ResultSet rs = stmt.getGeneratedKeys();
-
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
+            if (rs.next()) return rs.getInt(1);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return -1;
+    }
+    public boolean deleteUser(int userId) {
+        String sql = "DELETE FROM Users WHERE UserID=?";
+        try (Connection conn = dbConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            int affected = stmt.executeUpdate();
+            return affected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    @Override
+    public boolean updateUser(int userId, String username, String name, String email, String phoneNumber, int role) {
+        String roleText = switch (role) {
+            case 1 -> "Admin";
+            case 2 -> "Coordinator";
+            default -> "Customer";
+        };
+
+        String sql = "UPDATE Users SET Username=?, Name=?, Email=?, PhoneNumber=?, RoleInt=?, Role=? WHERE UserID=?";
+        try (Connection conn = dbConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, name);
+            stmt.setString(3, email);
+            stmt.setString(4, phoneNumber);
+            stmt.setInt(5, role);
+            stmt.setString(6, roleText);
+            stmt.setInt(7, userId);
+
+            int affected = stmt.executeUpdate();
+            return affected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -50,28 +50,30 @@
             <Insets bottom="10" left="10" right="10" top="10" />
          </padding>
          <children>
-            <TextField promptText="Search user" />
+            <TextField fx:id="txtSearch" promptText="Search user" />
             <Separator prefHeight="9.0" prefWidth="277.0" />
             <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="User creation" />
-            <TextField promptText="Name" />
-            <TextField promptText="Phone number" />
-            <TextField promptText="E-mail" />
-            <ComboBox prefHeight="25.0" prefWidth="288.0" promptText="Role" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="289.0" text="Add">
+            <TextField fx:id="txtName" promptText="Name" />
+            <TextField fx:id="txtPhone" promptText="Phone number" />
+            <TextField fx:id="txtEmail" promptText="E-mail" />
+            <ComboBox fx:id="comboRole" prefHeight="25.0" prefWidth="288.0" promptText="Role" />
+             <TextField fx:id="txtUsername" promptText="Username" />
+             <TextField fx:id="txtPassword" promptText="Password" />
+            <Button fx:id="btnAdd" onAction="#addUser" mnemonicParsing="false" prefHeight="25.0" prefWidth="289.0" text="Add">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin></Button>
             <Separator prefHeight="9.0" prefWidth="277.0" />
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="287.0" text="Selected User" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="296.0" text="Delete User">
+            <Button fx:id="btnDelete" onAction="#deleteUser" mnemonicParsing="false" prefHeight="25.0" prefWidth="296.0" text="Delete User">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
             </Button>
             <Separator prefWidth="200.0" />
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="287.0" text="Selected User" />
-            <Button maxWidth="Infinity" text="Edit User" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Update User" />
+            <Button fx:id="btnEdit" onAction="#editUser" maxWidth="Infinity" text="Edit User" />
+            <Button fx:id="btnUpdate" onAction="#updateUser" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Update User" />
          </children>
          <BorderPane.margin>
             <Insets bottom="10.0" right="10.0" />
@@ -79,7 +81,7 @@
       </VBox>
    </right>
    <center>
-      <TableView prefHeight="499.0" prefWidth="809.0" styleClass="cBoarder" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableUsers" prefHeight="499.0" prefWidth="809.0" styleClass="cBoarder" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" />
          </BorderPane.margin>
@@ -87,10 +89,11 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
          <columns>
-            <TableColumn prefWidth="97.3333740234375" text="Name" />
-            <TableColumn prefWidth="76.66668701171875" text="Phone number" />
-            <TableColumn prefWidth="82.0" text="E-mail" />
-            <TableColumn prefWidth="81.33331298828125" text="Role" />
+             <TableColumn fx:id="colUsername" prefWidth="97.33" text="Username" />
+            <TableColumn fx:id="colName" prefWidth="97.3333740234375" text="Name" />
+            <TableColumn fx:id="colPhone" prefWidth="76.66668701171875" text="Phone number" />
+            <TableColumn fx:id="colEmail" prefWidth="82.0" text="E-mail" />
+            <TableColumn fx:id="colRole" prefWidth="81.33331298828125" text="Role" />
          </columns>
       </TableView>
    </center>

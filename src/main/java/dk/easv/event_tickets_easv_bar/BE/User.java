@@ -1,32 +1,61 @@
 package dk.easv.event_tickets_easv_bar.BE;
 
+import javafx.beans.property.*;
+
 public class User {
 
-    private int id;
-    private String username;
-    private String name;
-    private String email;
-    private String phoneNumber;
-    private int role;
+    private final IntegerProperty id = new SimpleIntegerProperty();
+    private final StringProperty username = new SimpleStringProperty();
+    private final StringProperty name = new SimpleStringProperty();
+    private final StringProperty email = new SimpleStringProperty();
+    private final StringProperty phoneNumber = new SimpleStringProperty();
+    private final IntegerProperty roleInt = new SimpleIntegerProperty();
+    private final StringProperty roleText = new SimpleStringProperty();
 
-    public User(int id, String username, String name, String email, String phoneNumber, int role) {
-        this.id = id;
-        this.username = username;
-        this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.role = role;
+    public User(int id, String username, String name, String email, String phoneNumber, int roleInt) {
+        this.id.set(id);
+        this.username.set(username);
+        this.name.set(name);
+        this.email.set(email);
+        this.phoneNumber.set(phoneNumber);
+        this.roleInt.set(roleInt);
+
+        this.roleText.set(switch(roleInt) {
+            case 1 -> "Admin";
+            case 2 -> "Coordinator";
+            default -> "Customer";
+        });
     }
 
-    public int getId() { return id; }
+    // Getters
+    public int getId() { return id.get(); }
+    public String getUsername() { return username.get(); }
+    public String getName() { return name.get(); }
+    public String getEmail() { return email.get(); }
+    public String getPhoneNumber() { return phoneNumber.get(); }
+    public int getRoleInt() { return roleInt.get(); }
+    public String getRoleText() { return roleText.get(); }
 
-    public String getUsername() { return username; }
+    // Properties for TableView binding
+    public IntegerProperty idProperty() { return id; }
+    public StringProperty usernameProperty() { return username; }
+    public StringProperty nameProperty() { return name; }
+    public StringProperty emailProperty() { return email; }
+    public StringProperty phoneNumberProperty() { return phoneNumber; }
+    public IntegerProperty roleIntProperty() { return roleInt; }
+    public StringProperty roleTextProperty() { return roleText; }
 
-    public String getName() { return name; }
-
-    public String getEmail() { return email; }
-
-    public String getPhoneNumber() { return phoneNumber; }
-
-    public int getRole() { return role; }
+    // Setters
+    public void setUsername(String username) { this.username.set(username); }
+    public void setName(String name) { this.name.set(name); }
+    public void setEmail(String email) { this.email.set(email); }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber.set(phoneNumber); }
+    public void setRoleInt(int roleInt) {
+        this.roleInt.set(roleInt);
+        this.roleText.set(switch(roleInt) {
+            case 1 -> "Admin";
+            case 2 -> "Coordinator";
+            default -> "Customer";
+        });
+    }
 }

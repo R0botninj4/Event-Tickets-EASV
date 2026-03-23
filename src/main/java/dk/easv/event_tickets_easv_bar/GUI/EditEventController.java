@@ -44,7 +44,7 @@ public class EditEventController {
         // Load coordinators (role == 2) into the ComboBox
         List<User> allUsers = userDAO.getAllUsers();
         List<User> coordinators = allUsers.stream()
-                .filter(u -> u.getRole() == 2)
+                .filter(u -> u.getRoleInt() == 2)
                 .toList();
 
         cmbCoordinator.setItems(FXCollections.observableArrayList(coordinators));
