@@ -48,11 +48,21 @@ public class Event {
     public int getTicketsSold() { return ticketsSold; }
     public int getCoordinatorID() { return coordinatorID; }
     public String getCoordinatorName() { return coordinatorName; }
-    public String getLocationGuidance() {return locationGuidance;}
+    public String getLocationGuidance() { return locationGuidance; }
 
-    public void setLocationGuidance(String locationGuidance) {
-        this.locationGuidance = locationGuidance;
-    }
+    // ---------------- SETTERS ----------------
+
+    public void setName(String name) { this.name = name; }
+    public void setInfo(String info) { this.info = info; }
+    public void setDate(LocalDate date) { this.date = date; }
+    public void setEndTime(LocalTime endTime) { this.endTime = endTime; }
+    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+    public void setLocation(String location) { this.location = location; }
+    public void setLocationGuidance(String locationGuidance) { this.locationGuidance = locationGuidance; }
+    public void setTicketAmount(int ticketAmount) { this.ticketAmount = ticketAmount; }
+    public void setTicketsSold(int ticketsSold) { this.ticketsSold = ticketsSold; }
+    public void setCoordinatorID(int coordinatorID) { this.coordinatorID = coordinatorID; }
+    public void setCoordinatorName(String coordinatorName) { this.coordinatorName = coordinatorName; }
 
     // ---------------- STATUS ----------------
 

@@ -166,12 +166,28 @@ public class HelloController implements Initializable {
 
     @FXML
     private void onClickOpenViewEvent(ActionEvent actionEvent) throws IOException {
+        dk.easv.event_tickets_easv_bar.BE.Event selectedEvent = tblEvents.getSelectionModel().getSelectedItem();
+
+        if (selectedEvent == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Event Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select an event from the list first.");
+            alert.showAndWait();
+            return;
+        }
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/dk/easv/Views/Event-view.fxml"));
         Scene scene = new Scene(loader.load());
+
+        EventController controller = loader.getController();
+        controller.setEvent(selectedEvent);
+
         Stage stage = new Stage();
         stage.setTitle("Event Info");
         stage.setScene(scene);
         stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
 
