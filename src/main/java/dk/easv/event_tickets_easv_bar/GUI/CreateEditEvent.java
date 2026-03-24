@@ -6,6 +6,9 @@ import dk.easv.event_tickets_easv_bar.BLL.EventManager;
 import dk.easv.event_tickets_easv_bar.BLL.UserManager;
 import dk.easv.event_tickets_easv_bar.GUI.Interface.ClosableWindow;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -44,7 +47,8 @@ public class CreateEditEvent implements ClosableWindow {
     private EventManager eventManager = new EventManager();
     private UserManager userManager = new UserManager();
 
-    private Event selectedEvent; // used for editing
+    private ObservableList<Event> events = FXCollections.observableArrayList();
+    private Event selectedEvent;
 
     // ---------------- INIT ----------------
     @FXML
@@ -57,6 +61,14 @@ public class CreateEditEvent implements ClosableWindow {
         loadCoordinators();
         loadTimeOptions();
         setupSearch();
+
+        // 🔥 AUTO SELECT → fill form
+        eventTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+            if (newSel != null) {
+                selectedEvent = newSel;
+                fillForm(newSel);
+            }
+        });
     }
 
     // ---------------- TABLE ----------------
@@ -86,9 +98,8 @@ public class CreateEditEvent implements ClosableWindow {
 
     // ---------------- LOAD ----------------
     private void loadEvents() {
-        eventTable.setItems(FXCollections.observableArrayList(
-                eventManager.getAllEvents()
-        ));
+        events.clear();
+        events.addAll(eventManager.getAllEvents());
     }
 
     private void loadCoordinators() {
@@ -126,6 +137,32 @@ public class CreateEditEvent implements ClosableWindow {
         ));
     }
 
+    // ---------------- SEARCH ----------------
+    private void setupSearch() {
+
+        FilteredList<Event> filtered = new FilteredList<>(events, p -> true);
+
+        txtSearch.textProperty().addListener((obs, oldVal, newVal) -> {
+            filtered.setPredicate(event -> {
+
+                if (newVal == null || newVal.isEmpty()) return true;
+
+                String search = newVal.toLowerCase();
+
+                if (event.getName().toLowerCase().contains(search)) return true;
+                if (event.getLocation().toLowerCase().contains(search)) return true;
+                if (event.getCoordinatorName().toLowerCase().contains(search)) return true;
+
+                return false;
+            });
+        });
+
+        SortedList<Event> sorted = new SortedList<>(filtered);
+        sorted.comparatorProperty().bind(eventTable.comparatorProperty());
+
+        eventTable.setItems(sorted);
+    }
+
     // ---------------- FILL FORM ----------------
     private void fillForm(Event event) {
 
@@ -138,7 +175,6 @@ public class CreateEditEvent implements ClosableWindow {
         dpDate.setValue(event.getDate());
         dpEndDate.setValue(event.getEndDate());
 
-        // Coordinator
         for (User user : cbCoordinator.getItems()) {
             if (user.getId() == event.getCoordinatorID()) {
                 cbCoordinator.setValue(user);
@@ -146,7 +182,6 @@ public class CreateEditEvent implements ClosableWindow {
             }
         }
 
-        // Time
         if (event.getEndTime() != null) {
             cbHour.setValue(event.getEndTime().getHour());
             cbMinute.setValue(event.getEndTime().getMinute());
@@ -156,20 +191,9 @@ public class CreateEditEvent implements ClosableWindow {
         }
     }
 
-    // ---------------- ALERT ----------------
-    private void showAlert(String title, String message) {
-
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-
-        alert.showAndWait();
-    }
-
-    // ---------------- ADD EVENT ----------------
+    // ---------------- SAVE (ADD + UPDATE) ----------------
     @FXML
-    private void handleAddEvent() {
+    private void handleUpdateEvent() {
 
         try {
 
@@ -178,13 +202,8 @@ public class CreateEditEvent implements ClosableWindow {
                 return;
             }
 
-            if (dpDate.getValue() == null) {
-                showAlert("Error", "Start date is required");
-                return;
-            }
-
-            if (dpEndDate.getValue() == null) {
-                showAlert("Error", "End date is required");
+            if (dpDate.getValue() == null || dpEndDate.getValue() == null) {
+                showAlert("Error", "Dates are required");
                 return;
             }
 
@@ -202,30 +221,50 @@ public class CreateEditEvent implements ClosableWindow {
             }
 
             LocalTime endTime = null;
-
             if (cbHour.getValue() != null && cbMinute.getValue() != null) {
                 endTime = LocalTime.of(cbHour.getValue(), cbMinute.getValue());
             }
 
             User user = cbCoordinator.getValue();
 
-            Event event = new Event(
-                    0,
-                    txtName.getText(),
-                    txtInfo.getText(),
-                    dpDate.getValue(),
-                    endTime,
-                    dpEndDate.getValue(),
-                    txtLocation.getText(),
-                    tickets,
-                    0,
-                    user.getId(),
-                    user.getName()
-            );
+            if (selectedEvent == null) {
+                // ADD
+                Event event = new Event(
+                        0,
+                        txtName.getText(),
+                        txtInfo.getText(),
+                        dpDate.getValue(),
+                        endTime,
+                        dpEndDate.getValue(),
+                        txtLocation.getText(),
+                        tickets,
+                        0,
+                        user.getId(),
+                        user.getName()
+                );
 
-            event.setLocationGuidance(txtLocationGuidance.getText());
+                event.setLocationGuidance(txtLocationGuidance.getText());
+                eventManager.createEvent(event);
 
-            eventManager.createEvent(event);
+            } else {
+                // UPDATE
+                Event updatedEvent = new Event(
+                        selectedEvent.getId(),
+                        txtName.getText(),
+                        txtInfo.getText(),
+                        dpDate.getValue(),
+                        endTime,
+                        dpEndDate.getValue(),
+                        txtLocation.getText(),
+                        tickets,
+                        selectedEvent.getTicketsSold(),
+                        user.getId(),
+                        user.getName()
+                );
+
+                updatedEvent.setLocationGuidance(txtLocationGuidance.getText());
+                eventManager.updateEvent(updatedEvent);
+            }
 
             loadEvents();
             clearFields();
@@ -236,66 +275,33 @@ public class CreateEditEvent implements ClosableWindow {
         }
     }
 
-    // ---------------- EDIT BUTTON ----------------
+    // ---------------- ADD BUTTON ----------------
     @FXML
-    private void handleEditEvent() {
+    private void handleAddEvent() {
+        clearFields();
+    }
+
+    // ---------------- DELETE ----------------
+    @FXML
+    private void handleDeleteEvent() {
 
         Event selected = eventTable.getSelectionModel().getSelectedItem();
 
         if (selected == null) {
-            showAlert("Error", "Select an event first");
+            showAlert("Error", "Select an event to delete");
             return;
         }
 
-        selectedEvent = selected;
-        fillForm(selected);
-    }
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete Event");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Are you sure you want to delete this event?");
 
-    // ---------------- UPDATE EVENT ----------------
-    @FXML
-    private void handleUpdateEvent() {
+        if (confirm.showAndWait().get() == ButtonType.OK) {
 
-        if (selectedEvent == null) {
-            showAlert("Error", "Press Edit first");
-            return;
-        }
-
-        try {
-
-            int tickets = Integer.parseInt(txtTicketAmount.getText());
-
-            LocalTime endTime = null;
-            if (cbHour.getValue() != null && cbMinute.getValue() != null) {
-                endTime = LocalTime.of(cbHour.getValue(), cbMinute.getValue());
-            }
-
-            User user = cbCoordinator.getValue();
-
-            Event updatedEvent = new Event(
-                    selectedEvent.getId(),
-                    txtName.getText(),
-                    txtInfo.getText(),
-                    dpDate.getValue(),
-                    endTime,
-                    dpEndDate.getValue(),
-                    txtLocation.getText(),
-                    tickets,
-                    selectedEvent.getTicketsSold(),
-                    user.getId(),
-                    user.getName()
-            );
-
-            updatedEvent.setLocationGuidance(txtLocationGuidance.getText());
-
-            eventManager.updateEvent(updatedEvent);
-
+            eventManager.deleteEvent(selected.getId());
             loadEvents();
             clearFields();
-            selectedEvent = null;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Error", "Update failed");
         }
     }
 
@@ -315,50 +321,18 @@ public class CreateEditEvent implements ClosableWindow {
         cbHour.setValue(null);
         cbMinute.setValue(null);
 
+        eventTable.getSelectionModel().clearSelection();
         selectedEvent = null;
     }
 
-    @FXML
-    private void handleDeleteEvent() {
+    // ---------------- ALERT ----------------
+    private void showAlert(String title, String message) {
 
-        Event selected = eventTable.getSelectionModel().getSelectedItem();
-
-        if (selected == null) {
-            showAlert("Error", "Select an event to delete");
-            return;
-        }
-
-        // Confirm dialog
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Delete Event");
-        confirm.setHeaderText(null);
-        confirm.setContentText("Are you sure you want to delete this event?");
-
-        if (confirm.showAndWait().get() == ButtonType.OK) {
-
-            eventManager.deleteEvent(selected.getId());
-
-            loadEvents();
-            clearFields();
-        }
-    }
-
-    private void setupSearch() {
-
-        txtSearch.textProperty().addListener((obs, oldVal, newVal) -> {
-
-            String search = newVal.toLowerCase();
-
-            eventTable.setItems(FXCollections.observableArrayList(
-                    eventManager.getAllEvents().stream()
-                            .filter(e ->
-                                    e.getName().toLowerCase().contains(search) ||
-                                            e.getLocation().toLowerCase().contains(search) ||
-                                            e.getCoordinatorName().toLowerCase().contains(search)
-                            )
-                            .toList()
-            ));
-        });
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     // ---------------- CLOSE ----------------

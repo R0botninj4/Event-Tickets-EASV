@@ -93,7 +93,10 @@ public class HelloController implements Initializable {
                 btnManageUsers.setVisible(false);
                 btnManageUsers.setManaged(false);
 
+            } else if (loggedInUser.getRoleInt()==67) {
+                lblUserRole.setText("GOD");
             }
+
         }
 
 

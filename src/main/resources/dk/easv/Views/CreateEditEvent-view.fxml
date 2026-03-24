@@ -93,15 +93,7 @@
                        </graphic>
                    </Button>
 
-                   <Button fx:id="editButton" maxWidth="Infinity" onAction="#handleEditEvent" text="" HBox.hgrow="ALWAYS">
-                       <graphic>
-                           <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
-                               <image>
-                                   <Image url="@../../../Icons/icon_edit.png" />
-                               </image>
-                           </ImageView>
-                       </graphic>
-                   </Button>
+
 
                    <Button fx:id="deleteButton" maxWidth="Infinity" onAction="#handleDeleteEvent" text="" HBox.hgrow="ALWAYS">
                    <graphic>
