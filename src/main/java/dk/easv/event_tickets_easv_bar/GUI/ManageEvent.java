@@ -112,8 +112,6 @@ public class ManageEvent implements ClosableWindow {
         tblEvents.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, selected) -> {
             if (selected != null) {
                 lblSelectedEventAssign.setText(selected.getName());
-                lblSelectedEventRemove.setText(selected.getName());
-                lblSelectedEventEdit.setText(selected.getName());
 
                 // Auto-select the current coordinator in the dropdown
                 cmbCoordinator.getItems().stream()
@@ -122,8 +120,6 @@ public class ManageEvent implements ClosableWindow {
                         .ifPresent(u -> cmbCoordinator.setValue(u));
             } else {
                 lblSelectedEventAssign.setText("Selected Event");
-                lblSelectedEventRemove.setText("Selected Event");
-                lblSelectedEventEdit.setText("Selected Event");
                 cmbCoordinator.setValue(null);
             }
         });

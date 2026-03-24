@@ -4,6 +4,7 @@ import dk.easv.event_tickets_easv_bar.BE.Event;
 import dk.easv.event_tickets_easv_bar.BE.User;
 import dk.easv.event_tickets_easv_bar.BLL.EventManager;
 import dk.easv.event_tickets_easv_bar.DAL.UserDAO;
+import dk.easv.event_tickets_easv_bar.GUI.Interface.ClosableWindow;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +16,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
-public class EditEventController {
+public class EditEventController implements ClosableWindow {
 
     @FXML private TextField txtEventName;
     @FXML private TextArea txtEventInfo;
@@ -41,6 +42,7 @@ public class EditEventController {
 
     @FXML
     public void initialize() {
+        enableEscClose(closeButton);
         // Load coordinators (role == 2) into the ComboBox
         List<User> allUsers = userDAO.getAllUsers();
         List<User> coordinators = allUsers.stream()
