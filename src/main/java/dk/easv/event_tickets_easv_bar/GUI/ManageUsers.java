@@ -1,5 +1,7 @@
 package dk.easv.event_tickets_easv_bar.GUI;
 
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import dk.easv.event_tickets_easv_bar.BE.User;
 import dk.easv.event_tickets_easv_bar.BLL.UserManager;
 import dk.easv.event_tickets_easv_bar.GUI.Interface.ClosableWindow;
@@ -38,15 +40,55 @@ public class ManageUsers implements ClosableWindow {
     public void initialize() {
         tableUsers.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         enableEscClose(closeButton);
-        // Roles in ComboBox
+
         comboRole.setItems(FXCollections.observableArrayList("Admin", "Coordinator", "Customer"));
 
-        // Bind columns to User properties
         colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colPhone.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         colRole.setCellValueFactory(new PropertyValueFactory<>("roleText"));
+
+        // 🔥 AUTO LOAD når man klikker
+        tableUsers.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+            if (newSel != null) {
+                selectedUser = newSel;
+
+                txtUsername.setText(newSel.getUsername());
+                txtName.setText(newSel.getName());
+                txtEmail.setText(newSel.getEmail());
+                txtPhone.setText(newSel.getPhoneNumber());
+                comboRole.setValue(newSel.getRoleText());
+
+                txtPassword.clear(); // 🔥 password vises ikke
+            }
+        });
+
+        FilteredList<User> filteredUsers = new FilteredList<>(users, p -> true);
+
+        txtSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredUsers.setPredicate(user -> {
+
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String search = newValue.toLowerCase();
+
+                if (user.getUsername().toLowerCase().contains(search)) return true;
+                if (user.getName().toLowerCase().contains(search)) return true;
+                if (user.getEmail() != null && user.getEmail().toLowerCase().contains(search)) return true;
+                if (user.getPhoneNumber() != null && user.getPhoneNumber().toLowerCase().contains(search)) return true;
+                if (user.getRoleText().toLowerCase().contains(search)) return true;
+
+                return false;
+            });
+        });
+
+        SortedList<User> sortedUsers = new SortedList<>(filteredUsers);
+        sortedUsers.comparatorProperty().bind(tableUsers.comparatorProperty());
+
+        tableUsers.setItems(sortedUsers);
 
         loadUsers();
     }
@@ -54,62 +96,21 @@ public class ManageUsers implements ClosableWindow {
     private void loadUsers() {
         users.clear();
         users.addAll(userManager.getAllUsers());
-        tableUsers.setItems(users);
+
     }
 
+    // ➕ PLUS KNAP = NY USER (ryd felter)
     @FXML
     private void addUser() {
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
-        String name = txtName.getText();
-        String email = txtEmail.getText();
-        String phone = txtPhone.getText();
-        String roleStr = comboRole.getValue();
-
-        if(username.isEmpty() || password.isEmpty() || name.isEmpty() || roleStr == null) {
-            showAlert("Error", "Username, password, name, and role are required");
-            return;
-        }
-
-        int roleInt = switch(roleStr) {
-            case "Admin" -> 1;
-            case "Coordinator" -> 2;
-            default -> 3;
-        };
-
-        int id = userManager.addUser(username, password, name, email, phone, roleInt);
-        if(id != -1) {
-            showAlert("Success", "User added with ID: " + id);
-            clearFields();
-            loadUsers();
-        } else {
-            showAlert("Error", "Failed to add user");
-        }
+        clearFields();
     }
 
-    @FXML
-    private void editUser() {
-        selectedUser = tableUsers.getSelectionModel().getSelectedItem();
-        if(selectedUser == null) {
-            showAlert("Error", "Please select a user to edit");
-            return;
-        }
-
-        txtUsername.setText(selectedUser.getUsername());
-        txtName.setText(selectedUser.getName());
-        txtEmail.setText(selectedUser.getEmail());
-        txtPhone.setText(selectedUser.getPhoneNumber());
-        comboRole.setValue(selectedUser.getRoleText());
-    }
-
+    // 💾 SAVE = ADD + UPDATE
     @FXML
     private void updateUser() {
-        if(selectedUser == null) {
-            showAlert("Error", "No user selected for update");
-            return;
-        }
 
         String username = txtUsername.getText();
+        String password = txtPassword.getText();
         String name = txtName.getText();
         String email = txtEmail.getText();
         String phone = txtPhone.getText();
@@ -126,22 +127,41 @@ public class ManageUsers implements ClosableWindow {
             default -> 3;
         };
 
-        selectedUser.setUsername(username);
-        selectedUser.setName(name);
-        selectedUser.setEmail(email);
-        selectedUser.setPhoneNumber(phone);
-        selectedUser.setRoleInt(roleInt);
+        // 🔥 ADD
+        if (selectedUser == null) {
 
-        boolean success = userManager.updateUser(selectedUser);
+            if(password.isEmpty()) {
+                showAlert("Error", "Password required for new user");
+                return;
+            }
 
-        if(success) {
-            showAlert("Success", "User updated successfully");
-            clearFields();
-            loadUsers();
-            selectedUser = null;
+            int id = userManager.addUser(username, password, name, email, phone, roleInt);
+
+            if(id != -1) {
+                showAlert("Success", "User created!");
+            } else {
+                showAlert("Error", "Failed to create user");
+            }
+
         } else {
-            showAlert("Error", "Failed to update user");
+            // 🔥 UPDATE
+            selectedUser.setUsername(username);
+            selectedUser.setName(name);
+            selectedUser.setEmail(email);
+            selectedUser.setPhoneNumber(phone);
+            selectedUser.setRoleInt(roleInt);
+
+            boolean success = userManager.updateUser(selectedUser);
+
+            if(success) {
+                showAlert("Success", "User updated!");
+            } else {
+                showAlert("Error", "Failed to update user");
+            }
         }
+
+        clearFields();
+        loadUsers();
     }
 
     @FXML
@@ -180,6 +200,9 @@ public class ManageUsers implements ClosableWindow {
         txtPhone.clear();
         txtEmail.clear();
         comboRole.getSelectionModel().clearSelection();
+
+        tableUsers.getSelectionModel().clearSelection(); // 🔥
+        selectedUser = null; // 🔥
     }
 
     private void showAlert(String title, String message) {
@@ -189,7 +212,4 @@ public class ManageUsers implements ClosableWindow {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-
-
 }

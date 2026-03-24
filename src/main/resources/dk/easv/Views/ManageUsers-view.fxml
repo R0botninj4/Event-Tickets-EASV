@@ -87,15 +87,6 @@
                    </graphic>
                </Button>
 
-                  <Button fx:id="btnEdit" maxWidth="1.7976931348623157E308" onAction="#editUser" text="" HBox.hgrow="ALWAYS">
-                      <graphic>
-                          <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
-                              <image>
-                                  <Image url="@../../../Icons/icon_edit.png" />
-                              </image>
-                          </ImageView>
-                      </graphic>
-                  </Button>
 
                   <Button fx:id="btnDelete" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deleteUser" text="" HBox.hgrow="ALWAYS">
                       <graphic>
