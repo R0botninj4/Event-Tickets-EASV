@@ -8,13 +8,15 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.CreateTicket">
+<BorderPane prefHeight="705.0" prefWidth="928.0" stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.CreateTicket">
    <top>
       <VBox spacing="10">
          <padding>
@@ -28,7 +30,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Region prefHeight="53.0" prefWidth="711.0" HBox.hgrow="ALWAYS" />
+                  <Region prefHeight="53.0" prefWidth="568.0" HBox.hgrow="ALWAYS" />
                   <Label prefHeight="33.0" prefWidth="84.0" text="Coordinator">
                      <HBox.margin>
                         <Insets bottom="10.0" top="10.0" />
@@ -50,23 +52,16 @@
             <Insets bottom="10" left="10" right="10" top="10" />
          </padding>
          <children>
-            <TextField fx:id="txtSearch" promptText="Search event" />
-            <Separator />
             <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Ticket creation" />
-            <TextField fx:id="txtEventName" promptText="Event Name" editable="false" />
-            <TextField fx:id="txtDate" promptText="Date" editable="false"/>
-            <TextField fx:id="txtLocation" promptText="Location" editable="false" />
+            <TextField fx:id="txtEventName" editable="false" promptText="Event Name" />
+            <TextField fx:id="txtDate" editable="false" promptText="Date" />
+            <TextField fx:id="txtLocation" editable="false" promptText="Location" />
             <TextField promptText="Customer name" />
             <TextField promptText="Customer Phone number" />
             <TextField fx:id="txtAmount" promptText="Ticket amount" />
             <ComboBox fx:id="comboTicketType" prefHeight="25.0" prefWidth="288.0" promptText="What kind of ticket" />
             <Separator />
             <TextField fx:id="txtEmail" promptText="E-mail" />
-            <Separator prefHeight="9.0" prefWidth="280.0" />
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="287.0" text="Selected Event" />
-            <Separator prefWidth="200.0" />
-            <Button fx:id="sendTicketBtn" onAction="#handleSendTicket" maxWidth="Infinity" text="Send ticket" />
-            <Button fx:id="PrintTicketBtn" onAction="#handlePrintTicket" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Print ticket" />
          </children>
          <BorderPane.margin>
             <Insets bottom="10.0" right="10.0" />
@@ -74,22 +69,68 @@
       </VBox>
    </right>
    <center>
-      <TableView fx:id="eventTable" prefHeight="499.0" prefWidth="809.0" styleClass="cBoarder" BorderPane.alignment="CENTER">
-         <columns>
-            <TableColumn fx:id="colName" prefWidth="97.3333740234375" text="Event name" />
-            <TableColumn fx:id="colDate" prefWidth="76.66668701171875" text="Date" />
-            <TableColumn fx:id="colLocation" prefWidth="82.0" text="Location" />
-            <TableColumn fx:id="colCoordinator" prefWidth="81.33331298828125" text="Coordiantor" />
-            <TableColumn fx:id="colTicketsLeft" prefWidth="125.99996948242188" text="Status/Tickets left" />
-            <TableColumn fx:id="colTicketsSold" prefWidth="128.66668701171875" text="Tickets sold" />
-            <TableColumn fx:id="colInfo" minWidth="7.99993896484375" prefWidth="110.6666259765625" text="Event info" />
-         </columns>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="34.0" prefWidth="618.0" spacing="20.0" styleClass="cBoarder">
+               <children>
+                  <TextField fx:id="txtSearch" promptText="Search event">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <Separator orientation="VERTICAL" prefHeight="25.0" prefWidth="215.0" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="sendTicketBtn" maxWidth="Infinity" onAction="#handleSendTicket" text="Send" HBox.hgrow="ALWAYS">
+                   <graphic>
+                       <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
+                           <image>
+                               <Image url="@../../../Icons/icon_send.png" />
+                           </image>
+                       </ImageView>
+                   </graphic>
+               </Button>
+
+                  <Button fx:id="PrintTicketBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handlePrintTicket" text="Print" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                      <graphic>
+                          <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
+                              <image>
+                                  <Image url="@../../../Icons/icon_print.png" />
+                              </image>
+                          </ImageView>
+                      </graphic>
+                  </Button>
+
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <TableView fx:id="eventTable" prefHeight="499.0" prefWidth="809.0" styleClass="cBoarder" VBox.vgrow="ALWAYS">
+               <columns>
+                  <TableColumn fx:id="colName" prefWidth="97.3333740234375" text="Event name" />
+                  <TableColumn fx:id="colDate" prefWidth="76.66668701171875" text="Date" />
+                  <TableColumn fx:id="colLocation" prefWidth="82.0" text="Location" />
+                  <TableColumn fx:id="colCoordinator" prefWidth="81.33331298828125" text="Coordiantor" />
+                  <TableColumn fx:id="colTicketsLeft" prefWidth="125.99996948242188" text="Status/Tickets left" />
+                  <TableColumn fx:id="colTicketsSold" prefWidth="128.66668701171875" text="Tickets sold" />
+                  <TableColumn fx:id="colInfo" minWidth="7.99993896484375" prefWidth="110.6666259765625" text="Event info" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </TableView>
+         </children>
          <BorderPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" />
          </BorderPane.margin>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
+      </VBox>
    </center>
 </BorderPane>

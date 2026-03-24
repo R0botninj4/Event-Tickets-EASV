@@ -15,6 +15,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="520.0" prefWidth="500.0"
       stylesheets="@counter-strike-source.css"
@@ -110,8 +112,18 @@
         <!-- Save button -->
         <HBox alignment="CENTER_RIGHT">
             <VBox.margin><Insets right="10.0" top="10.0"/></VBox.margin>
+
             <Button fx:id="btnSave" mnemonicParsing="false" onAction="#handleSave"
-                    prefHeight="36.0" prefWidth="100.0" text="Save"/>
+                    prefHeight="36.0" prefWidth="100.0" text="Save">
+            <graphic>
+                <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../Icons/icon_save.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+
         </HBox>
 
     </children>

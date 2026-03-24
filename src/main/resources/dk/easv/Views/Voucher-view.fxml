@@ -8,13 +8,15 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.Voucher">
+<BorderPane prefHeight="551.0" prefWidth="852.0" stylesheets="@counter-strike-source.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.Voucher">
    <top>
       <VBox spacing="10">
          <padding>
@@ -53,20 +55,15 @@
             <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Voucher for all events" />
             <ComboBox fx:id="TILMADS3" prefHeight="25.0" prefWidth="288.0" promptText="What kind of voucher" />
             <TextField promptText="E-mail" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Print voucher" />
-            <Button maxWidth="Infinity" text="Send voucher" />
             <Separator>
                <VBox.margin>
                   <Insets bottom="30.0" top="30.0" />
                </VBox.margin></Separator>
             <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Voucher for specific events" />
-            <TextField promptText="Search event" />
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="287.0" text="Selected Event" />
             <Separator prefWidth="200.0" />
             <ComboBox fx:id="TILMADS31" prefHeight="25.0" prefWidth="288.0" promptText="What kind of voucher" />
             <TextField promptText="E-mail" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Print voucher" />
-            <Button maxWidth="Infinity" text="Send voucher" />
          </children>
          <BorderPane.margin>
             <Insets bottom="10.0" right="10.0" />
@@ -74,16 +71,62 @@
       </VBox>
    </right>
    <center>
-      <TableView prefHeight="507.0" prefWidth="359.0" styleClass="cBoarder" BorderPane.alignment="CENTER">
-         <columns>
-            <TableColumn prefWidth="97.3333740234375" text="Event name" />
-         </columns>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" styleClass="cBoarder">
+               <children>
+                  <TextField promptText="Search event">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <Separator orientation="VERTICAL" prefHeight="25.0" prefWidth="104.0" HBox.hgrow="ALWAYS" />
+
+                  <Button maxWidth="Infinity" text="Send" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                      <graphic>
+                          <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
+                              <image>
+                                  <Image url="@../../../Icons/icon_send.png" />
+                              </image>
+                          </ImageView>
+                      </graphic>
+                  </Button>
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Print" HBox.hgrow="ALWAYS">
+                   <graphic>
+                       <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
+                           <image>
+                               <Image url="@../../../Icons/icon_print.png" />
+                           </image>
+                       </ImageView>
+                   </graphic>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+               </Button>
+
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <TableView prefHeight="507.0" prefWidth="359.0" styleClass="cBoarder">
+               <columns>
+                  <TableColumn prefWidth="97.3333740234375" text="Event name" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+         </children>
          <BorderPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" />
          </BorderPane.margin>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
+      </VBox>
    </center>
 </BorderPane>
