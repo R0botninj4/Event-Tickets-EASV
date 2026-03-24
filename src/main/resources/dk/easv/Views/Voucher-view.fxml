@@ -73,7 +73,7 @@
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" styleClass="cBoarder">
+            <HBox prefHeight="0.0" prefWidth="522.0" spacing="20.0" styleClass="cBoarder">
                <children>
                   <TextField promptText="Search event">
                      <HBox.margin>
@@ -115,7 +115,7 @@
                   <Insets bottom="10.0" top="10.0" />
                </padding>
             </HBox>
-            <TableView prefHeight="507.0" prefWidth="359.0" styleClass="cBoarder">
+            <TableView prefHeight="507.0" prefWidth="359.0" styleClass="cBoarder" VBox.vgrow="ALWAYS">
                <columns>
                   <TableColumn prefWidth="97.3333740234375" text="Event name" />
                </columns>
