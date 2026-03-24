@@ -57,7 +57,7 @@
              <TextField fx:id="txtName" promptText="Event Name" />
              <DatePicker fx:id="dpDate" prefHeight="25.0" prefWidth="283.0" promptText="Select date" VBox.vgrow="ALWAYS" />
              <TextField fx:id="txtLocation" promptText="Location" />
-             <ComboBox fx:id="cbCoordinator" promptText="Select Coordinator" />
+             <ComboBox fx:id="cbCoordinator" prefHeight="25.0" prefWidth="287.0" promptText="Select Coordinator" VBox.vgrow="ALWAYS" />
              <TextField fx:id="txtTicketAmount" promptText="Ticket amount" />
              <TextField fx:id="txtInfo" promptText="Info" />
              <DatePicker fx:id="dpEndDate" prefHeight="25.0" prefWidth="291.0" promptText="End date" VBox.vgrow="ALWAYS" />
