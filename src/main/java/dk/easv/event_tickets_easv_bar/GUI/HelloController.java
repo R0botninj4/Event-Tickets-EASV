@@ -24,6 +24,16 @@ import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
 
+    @FXML
+    private Button btnCreateEditEvent;
+    @FXML
+    private Button btnManageEvent;
+    @FXML
+    private Button btnCreateTicket;
+    @FXML
+    private Button btnCustomers;
+    @FXML
+    private Button btnVoucher;
     // Login & User info
     @FXML
     private Label welcomeText;
@@ -70,10 +80,19 @@ public class HelloController implements Initializable {
         if (loggedInUser != null) {
             if (loggedInUser.getRoleInt() == 1) {
                 lblUserRole.setText("Admin");
+                btnVoucher.setVisible(false);
+                btnVoucher.setManaged(false);
+                btnCreateEditEvent.setVisible(false);
+                btnCreateEditEvent.setManaged(false);
+                btnCustomers.setVisible(false);
+                btnCustomers.setManaged(false);
+                btnCreateTicket.setVisible(false);
+                btnCreateTicket.setManaged(false);
             } else if (loggedInUser.getRoleInt() == 2) {
                 lblUserRole.setText("Coordinator");
                 btnManageUsers.setVisible(false);
                 btnManageUsers.setManaged(false);
+
             }
         }
 

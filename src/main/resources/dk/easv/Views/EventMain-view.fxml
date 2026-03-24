@@ -58,7 +58,7 @@
             </Label>
             <VBox prefHeight="637.0" prefWidth="155.0" spacing="30.0" styleClass="cBoarder" VBox.vgrow="ALWAYS">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onClickOpenCreateEditEvent" prefHeight="53.0" prefWidth="148.0" text="Create event">
+                  <Button fx:id="btnCreateEditEvent" mnemonicParsing="false" onAction="#onClickOpenCreateEditEvent" prefHeight="53.0" prefWidth="148.0" text="Create event">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
@@ -68,22 +68,22 @@
                         <Insets left="10.0" right="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#onClickOpenManageEvents" prefHeight="53.0" prefWidth="148.0" text="Manage Events">
+                  <Button fx:id="btnManageEvent" mnemonicParsing="false" onAction="#onClickOpenManageEvents" prefHeight="53.0" prefWidth="148.0" text="Manage Events">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#onClickOpenCreateTicket" prefHeight="53.0" prefWidth="148.0" text="Create Ticket">
+                  <Button fx:id="btnCreateTicket" mnemonicParsing="false" onAction="#onClickOpenCreateTicket" prefHeight="53.0" prefWidth="148.0" text="Create Ticket">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#onClickOpenCustomers" prefHeight="53.0" prefWidth="148.0" text="Costumers">
+                  <Button fx:id="btnCustomers" mnemonicParsing="false" onAction="#onClickOpenCustomers" prefHeight="53.0" prefWidth="148.0" text="Costumers">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#onClickOpenVoucher" prefHeight="53.0" prefWidth="148.0" text="Voucher">
+                  <Button fx:id="btnVoucher" mnemonicParsing="false" onAction="#onClickOpenVoucher" prefHeight="53.0" prefWidth="148.0" text="Voucher">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </VBox.margin>
