@@ -18,7 +18,7 @@
          <children>
             <HBox prefHeight="39.0" prefWidth="533.0" spacing="20.0" styleClass="cBoarder" stylesheets="@counter-strike-source.css">
                <children>
-                  <TextField promptText="Search event">
+                  <TextField fx:id="txtSearch" promptText="Search event">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>

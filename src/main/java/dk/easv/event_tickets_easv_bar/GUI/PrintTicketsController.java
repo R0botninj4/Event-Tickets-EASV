@@ -6,6 +6,9 @@ import dk.easv.event_tickets_easv_bar.BLL.TicketManager;
 import dk.easv.event_tickets_easv_bar.DAL.EventDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -27,15 +30,23 @@ public class PrintTicketsController {
     @FXML private TableColumn<Ticket, String> colEmail;
     @FXML private TableColumn<Ticket, String> colDate;
 
+    // 🔹 SEARCH
+    @FXML private TextField txtSearch;
+
+    // 🔹 DATA
+    private ObservableList<Ticket> tickets = FXCollections.observableArrayList();
+
     // 🔹 Cache (EventID → EventName)
     private Map<Integer, String> eventMap = new HashMap<>();
 
     @FXML
     public void initialize() {
-
-        loadEventNames();   // 🔥 load once
+        loadEventNames();
         setupTable();
-        loadTickets();
+
+        tickets.addAll(ticketManager.getAllTickets()); // 🔥 load tickets
+
+        setupSearch(); // 🔥 live search + sorting
     }
 
     // ---------------- LOAD EVENT NAMES ----------------
@@ -49,7 +60,6 @@ public class PrintTicketsController {
 
     // ---------------- TABLE SETUP ----------------
     private void setupTable() {
-
 
         colEvent.setCellValueFactory(data -> {
             String name = eventMap.getOrDefault(
@@ -80,10 +90,35 @@ public class PrintTicketsController {
         );
     }
 
-    // ---------------- LOAD TICKETS ----------------
-    private void loadTickets() {
-        List<Ticket> tickets = ticketManager.getAllTickets();
-        ticketTable.setItems(FXCollections.observableArrayList(tickets));
+    // ---------------- SEARCH ----------------
+    private void setupSearch() {
+
+        FilteredList<Ticket> filtered = new FilteredList<>(tickets, p -> true);
+
+        txtSearch.textProperty().addListener((obs, oldVal, newVal) -> {
+            filtered.setPredicate(ticket -> {
+
+                if (newVal == null || newVal.isEmpty()) return true;
+
+                String search = newVal.toLowerCase();
+
+                String eventName = eventMap.getOrDefault(ticket.getEventId(), "").toLowerCase();
+                String email = ticket.getEmail() != null ? ticket.getEmail().toLowerCase() : "";
+                String type = ticket.getTicketType() != null ? ticket.getTicketType().toLowerCase() : "";
+
+                if (eventName.contains(search)) return true;
+                if (email.contains(search)) return true;
+                if (type.contains(search)) return true;
+                if (String.valueOf(ticket.getAmount()).contains(search)) return true;
+
+                return false;
+            });
+        });
+
+        SortedList<Ticket> sorted = new SortedList<>(filtered);
+        sorted.comparatorProperty().bind(ticketTable.comparatorProperty());
+
+        ticketTable.setItems(sorted);
     }
 
     // ---------------- PRINT SELECTED ----------------
