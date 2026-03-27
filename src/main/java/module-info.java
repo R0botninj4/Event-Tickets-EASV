@@ -8,6 +8,7 @@ module dk.easv.event_tickets_easv_bar {
     requires java.desktop;
     requires javafx.graphics;
     requires javafx.base;
+    requires de.mkammerer.argon2.nolibs;
 
     opens dk.easv.event_tickets_easv_bar.GUI to javafx.fxml;
 

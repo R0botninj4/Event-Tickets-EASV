@@ -10,6 +10,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 
 public class LoginController {
 
@@ -63,6 +65,20 @@ public class LoginController {
         } catch (Exception e) {
             lblMessage.setText("Fejl: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+
+    public class PasswordHasher {
+
+        private static final Argon2 argon2 = Argon2Factory.create();
+
+        public static String hash(String password) {
+            return argon2.hash(3, 65536, 1, password.toCharArray());
+        }
+
+        public static boolean verify(String hash, String password) {
+            return argon2.verify(hash, password.toCharArray());
         }
     }
 }

@@ -144,14 +144,14 @@ public class UserDAO implements IUserDAO {
         }
     }
     @Override
-    public boolean updateUser(int userId, String username, String name, String email, String phoneNumber, int role) {
+    public boolean updateUser(int userId, String username, String name, String email, String phoneNumber,String passwordHash, int role) {
         String roleText = switch (role) {
             case 1 -> "Admin";
             case 2 -> "Coordinator";
             default -> "Customer";
         };
 
-        String sql = "UPDATE Users SET Username=?, Name=?, Email=?, PhoneNumber=?, RoleInt=?, Role=? WHERE UserID=?";
+        String sql = "UPDATE Users SET Username=?, Name=?, Email=?, PhoneNumber=?, PasswordHash=?, RoleInt=?, Role=? WHERE UserID=?";
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -159,9 +159,10 @@ public class UserDAO implements IUserDAO {
             stmt.setString(2, name);
             stmt.setString(3, email);
             stmt.setString(4, phoneNumber);
-            stmt.setInt(5, role);
-            stmt.setString(6, roleText);
-            stmt.setInt(7, userId);
+            stmt.setString(5, passwordHash);
+            stmt.setInt(6, role);
+            stmt.setString(7, roleText);
+            stmt.setInt(8, userId);
 
             int affected = stmt.executeUpdate();
             return affected > 0;
@@ -170,5 +171,32 @@ public class UserDAO implements IUserDAO {
             e.printStackTrace();
             return false;
         }
+    }
+    public User getUserByUsername(String username) {
+        String sql = "SELECT * FROM Users WHERE Username=?";
+
+        try (Connection conn = dbConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("UserID"),
+                        rs.getString("Username"),
+                        rs.getString("PasswordHash"), // 🔥 VIGTIG
+                        rs.getString("Name"),
+                        rs.getString("Email"),
+                        rs.getString("phoneNumber"),
+                        rs.getInt("RoleInt")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
