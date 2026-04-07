@@ -18,7 +18,6 @@ public class VoucherController implements ClosableWindow {
     @FXML private Button closeButton;
 
     // ===== ALL VOUCHER INPUT =====
-    @FXML private ComboBox<String> voucherTypeAllCombo;
     @FXML private TextField emailAllField;
 
     @FXML private TextField codeField;
@@ -26,13 +25,7 @@ public class VoucherController implements ClosableWindow {
     @FXML private DatePicker validUntilPicker;
     @FXML private ComboBox<String> typeCombo;
 
-    // ===== SPECIFIC =====
-    @FXML private ComboBox<String> voucherTypeSpecificCombo;
-    @FXML private TextField emailSpecificField;
-    @FXML private TextField codeSpecificField;
-    @FXML private TextField discountSpecificField;
-    @FXML private DatePicker validUntilSpecificPicker;
-    @FXML private ComboBox<String> typeComboSpecific;
+
 
     // ===== SEARCH =====
     @FXML private TextField searchField;
@@ -71,11 +64,8 @@ public class VoucherController implements ClosableWindow {
                 "Free Entry"
         );
 
-        voucherTypeAllCombo.setItems(types);
         typeCombo.setItems(types);
 
-        voucherTypeSpecificCombo.setItems(types);
-        typeComboSpecific.setItems(types);
     }
 
     private void setupTable() {
