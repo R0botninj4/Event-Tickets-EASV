@@ -1,6 +1,7 @@
 package dk.easv.event_tickets_easv_bar.DAL;
 
 import dk.easv.event_tickets_easv_bar.BE.Ticket;
+import dk.easv.event_tickets_easv_bar.BE.User;
 import dk.easv.event_tickets_easv_bar.DAL.DB.DBConnector;
 import dk.easv.event_tickets_easv_bar.DAL.Interface.ITicketDAO;
 
@@ -31,19 +32,33 @@ INSERT INTO Tickets
 (EventID, CustomerID, TicketType, TicketAmount, Email, Status) 
 VALUES (?,?,?,?,?, 'Active')
 """;
+
         String updateEventSql = "UPDATE Events SET TicketsSold = TicketsSold + ? WHERE EventID = ?";
 
         try (Connection conn = dbConnector.getConnection()) {
 
             conn.setAutoCommit(false); // transaction
 
+            // 🔥 FIX: resolve CustomerID from email
+            UserDAO userDAO = new UserDAO();
+
+            String email = ticket.getEmail().toLowerCase().trim();
+            ticket.setEmail(email);
+
+            int customerId = 0;
+
+            User user = userDAO.getUserByEmail(email);
+            if (user != null) {
+                customerId = user.getId();
+            }
+
             // INSERT ticket
             try (PreparedStatement stmt = conn.prepareStatement(insertSql)) {
                 stmt.setInt(1, ticket.getEventId());
-                stmt.setInt(2, ticket.getCustomerId());
+                stmt.setInt(2, customerId);
                 stmt.setString(3, ticket.getTicketType());
                 stmt.setInt(4, ticket.getAmount());
-                stmt.setString(5, ticket.getEmail());
+                stmt.setString(5, email);
                 stmt.executeUpdate();
             }
 
