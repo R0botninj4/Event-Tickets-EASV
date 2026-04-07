@@ -7,10 +7,10 @@ public class Voucher {
     private int id;
     private String code;
     private String type;
-    private double discount;
+    private String discount;
     private LocalDate validUntil;
 
-    public Voucher(int id, String code, String type, double discount, LocalDate validUntil) {
+    public Voucher(int id, String code, String type, String discount, LocalDate validUntil) {
         this.id = id;
         this.code = code;
         this.type = type;
@@ -18,17 +18,32 @@ public class Voucher {
         this.validUntil = validUntil;
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public String getCode() { return code; }
+    public String getCode() {
+        return code;
+    }
 
-    public String getType() { return type; }
+    public String getType() {
+        return type;
+    }
 
-    public double getDiscount() { return discount; }
+    public String getDiscount() {
+        return discount;
+    }
 
-    public LocalDate getValidUntil() { return validUntil; }
+    public LocalDate getValidUntil() {
+        return validUntil;
+    }
 
     public boolean isValid() {
         return validUntil == null || !LocalDate.now().isAfter(validUntil);
+    }
+
+    @Override
+    public String toString() {
+        return code + " (" + type + ", " + discount + "%)";
     }
 }
