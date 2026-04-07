@@ -79,6 +79,7 @@ public class CreateTicket implements ClosableWindow {
         colLocation.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLocation()));
         colCoordinator.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCoordinatorName()));
 
+
         colTicketsSold.setCellValueFactory(data ->
                 new SimpleStringProperty(String.valueOf(data.getValue().getTicketsSold()))
         );

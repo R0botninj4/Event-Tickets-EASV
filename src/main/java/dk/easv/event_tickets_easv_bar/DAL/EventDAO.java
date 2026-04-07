@@ -251,7 +251,7 @@ public class EventDAO implements IEventDAO {
     @Override
     public void deleteEvent(int id) {
 
-        String sql = "DELETE FROM Events WHERE EventID = ?";
+        String sql = "UPDATE Events SET DeletedAt = GETDATE() WHERE EventID = ?";
 
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

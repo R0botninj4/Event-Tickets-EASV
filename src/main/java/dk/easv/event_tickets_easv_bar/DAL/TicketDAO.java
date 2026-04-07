@@ -26,7 +26,11 @@ public class TicketDAO implements ITicketDAO {
     @Override
     public void buyTicket(Ticket ticket) {
 
-        String insertSql = "INSERT INTO Tickets (EventID, CustomerID, TicketType, TicketAmount, Email) VALUES (?,?,?,?,?)";
+        String insertSql = """
+INSERT INTO Tickets 
+(EventID, CustomerID, TicketType, TicketAmount, Email, Status) 
+VALUES (?,?,?,?,?, 'Active')
+""";
         String updateEventSql = "UPDATE Events SET TicketsSold = TicketsSold + ? WHERE EventID = ?";
 
         try (Connection conn = dbConnector.getConnection()) {
@@ -62,7 +66,7 @@ public class TicketDAO implements ITicketDAO {
     public List<Ticket> getAllTickets() {
         List<Ticket> tickets = new ArrayList<>();
 
-        String sql = "SELECT * FROM Tickets";
+        String sql = "SELECT * FROM Tickets WHERE Status = 'Active'";
 
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -84,7 +88,7 @@ public class TicketDAO implements ITicketDAO {
     public List<Ticket> getTicketsByEvent(int eventId) {
         List<Ticket> tickets = new ArrayList<>();
 
-        String sql = "SELECT * FROM Tickets WHERE EventID = ?";
+        String sql = "SELECT * FROM Tickets WHERE EventID = ? AND Status = 'Active'";
 
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -109,7 +113,7 @@ public class TicketDAO implements ITicketDAO {
     public List<Ticket> getTicketsByUser(int userId) {
         List<Ticket> tickets = new ArrayList<>();
 
-        String sql = "SELECT * FROM Tickets WHERE CustomerID = ?";
+        String sql = "SELECT * FROM Tickets WHERE CustomerID = ? AND Status = 'Active'";
 
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -138,7 +142,52 @@ public class TicketDAO implements ITicketDAO {
                 rs.getString("TicketType"),
                 rs.getInt("TicketAmount"),
                 rs.getTimestamp("PurchaseDate") != null ? rs.getTimestamp("PurchaseDate").toLocalDateTime() : null,
-                rs.getString("Email")
+                rs.getString("Email"),
+                rs.getString("status")
         );
+    }
+
+    public void cancelTicket(int ticketId) {
+
+        String getTicketSql = "SELECT EventID, TicketAmount FROM Tickets WHERE TicketID = ?";
+        String cancelSql = "UPDATE Tickets SET Status = 'Cancelled' WHERE TicketID = ?";
+        String updateEventSql = "UPDATE Events SET TicketsSold = TicketsSold - ? WHERE EventID = ?";
+
+        try (Connection conn = dbConnector.getConnection()) {
+
+            conn.setAutoCommit(false);
+
+            int eventId = 0;
+            int amount = 0;
+
+            // 🔍 Get ticket info
+            try (PreparedStatement stmt = conn.prepareStatement(getTicketSql)) {
+                stmt.setInt(1, ticketId);
+                ResultSet rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    eventId = rs.getInt("EventID");
+                    amount = rs.getInt("TicketAmount");
+                }
+            }
+
+            // ❌ Cancel ticket
+            try (PreparedStatement stmt = conn.prepareStatement(cancelSql)) {
+                stmt.setInt(1, ticketId);
+                stmt.executeUpdate();
+            }
+
+            // 🔄 Update TicketsSold
+            try (PreparedStatement stmt = conn.prepareStatement(updateEventSql)) {
+                stmt.setInt(1, amount);
+                stmt.setInt(2, eventId);
+                stmt.executeUpdate();
+            }
+
+            conn.commit();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

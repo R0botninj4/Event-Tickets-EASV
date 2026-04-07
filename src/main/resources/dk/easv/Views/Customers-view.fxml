@@ -75,7 +75,7 @@
                         <Insets bottom="5.0" right="10.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <TableView prefHeight="582.0" prefWidth="1020.0" styleClass="cBoarder" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="customerTable" prefHeight="582.0" prefWidth="1020.0" styleClass="cBoarder" VBox.vgrow="ALWAYS">
                      <columns>
                         <TableColumn prefWidth="97.3333740234375" text="Name" />
                         <TableColumn prefWidth="119.33330535888672" text="Phone number" />

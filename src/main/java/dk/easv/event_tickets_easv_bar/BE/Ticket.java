@@ -11,8 +11,9 @@ public class Ticket {
     private int amount;
     private LocalDateTime purchaseDate;
     private String email;
+    private String status;
 
-    public Ticket(int id, int eventId, int customerId, String ticketType, int amount, LocalDateTime purchaseDate, String email) {
+    public Ticket(int id, int eventId, int customerId, String ticketType, int amount, LocalDateTime purchaseDate, String email, String status) {
         this.id = id;
         this.eventId = eventId;
         this.customerId = customerId;
@@ -20,6 +21,7 @@ public class Ticket {
         this.amount = amount;
         this.purchaseDate = purchaseDate;
         this.email = email;
+        this.status = status;
     }
 
     // Constructor til oprettelse (uden id + purchaseDate)
@@ -50,4 +52,8 @@ public class Ticket {
     public void setAmount(int amount) { this.amount = amount; }
 
     public void setEmail(String email) { this.email = email; }
+
+    public String getStatus() { return status; }
+
+    public void setStatus(String status) { this.status = status; }
 }
