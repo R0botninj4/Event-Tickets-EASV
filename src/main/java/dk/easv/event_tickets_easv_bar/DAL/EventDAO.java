@@ -45,6 +45,7 @@ public class EventDAO implements IEventDAO {
                 u.Name AS CoordinatorName
             FROM Events e
             LEFT JOIN Users u ON e.CoordinatorID = u.UserID
+            WHERE e.DeletedAt IS NULL
         """;
 
         try (Connection conn = dbConnector.getConnection();
@@ -111,6 +112,7 @@ public class EventDAO implements IEventDAO {
             FROM Events e
             LEFT JOIN Users u ON e.CoordinatorID = u.UserID
             WHERE e.EventID = ?
+            AND e.DeletedAt IS NULL
         """;
 
         try (Connection conn = dbConnector.getConnection();
@@ -212,7 +214,7 @@ public class EventDAO implements IEventDAO {
                 TicketAmount = ?,
                 TicketsSold = ?,
                 CoordinatorID = ?
-            WHERE EventID = ?
+            WHERE EventID = ? AND DeletedAt IS NULL
         """;
 
         try (Connection conn = dbConnector.getConnection();
