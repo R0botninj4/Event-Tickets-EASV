@@ -92,8 +92,23 @@ public class HelloController implements Initializable {
                 lblUserRole.setText("Coordinator");
                 btnManageUsers.setVisible(false);
                 btnManageUsers.setManaged(false);
+            }
+            else if (loggedInUser.getRoleInt() == 3) {
+                btnVoucher.setVisible(false);
+                btnVoucher.setManaged(false);
+                btnCreateEditEvent.setVisible(false);
+                btnCreateEditEvent.setManaged(false);
+                btnCustomers.setVisible(false);
+                btnCustomers.setManaged(false);
+                btnCreateTicket.setVisible(false);
+                btnCreateTicket.setManaged(false);
+                btnManageUsers.setVisible(false);
+                btnManageUsers.setManaged(false);
+                btnManageEvent.setVisible(false);
+                btnManageEvent.setManaged(false);
+            }
 
-            } else if (loggedInUser.getRoleInt()==67) {
+        else if (loggedInUser.getRoleInt()==4) {
                 lblUserRole.setText("GOD");
             }
 

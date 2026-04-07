@@ -123,6 +123,8 @@ public class ManageUsers implements ClosableWindow {
         int roleInt = switch (roleStr) {
             case "Admin" -> 1;
             case "Coordinator" -> 2;
+            case "Customer" -> 3;
+            case "GOD"-> 4;
             default -> 3;
         };
 
