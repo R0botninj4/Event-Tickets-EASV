@@ -27,45 +27,30 @@ public class TicketDAO implements ITicketDAO {
     @Override
     public void buyTicket(Ticket ticket) {
 
-        String insertSql = """
-INSERT INTO Tickets 
-(EventID, CustomerID, TicketType, TicketAmount, Email, Status) 
-VALUES (?,?,?,?,?, 'Active')
-""";
-
-        String updateEventSql = "UPDATE Events SET TicketsSold = TicketsSold + ? WHERE EventID = ?";
+        String sql = """
+    INSERT INTO Tickets 
+    (EventID, CustomerID, TicketType, TicketAmount, Email, Status, Barcode)
+    VALUES (?,?,?,?,?, 'Active', ?)
+    """;
 
         try (Connection conn = dbConnector.getConnection()) {
 
-            conn.setAutoCommit(false); // transaction
+            conn.setAutoCommit(false);
 
-            // 🔥 FIX: resolve CustomerID from email
             UserDAO userDAO = new UserDAO();
 
-            String email = ticket.getEmail().toLowerCase().trim();
-            ticket.setEmail(email);
+            User user = userDAO.getUserByEmail(ticket.getEmail());
+            int customerId = (user != null) ? user.getId() : 0;
 
-            int customerId = 0;
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            User user = userDAO.getUserByEmail(email);
-            if (user != null) {
-                customerId = user.getId();
-            }
-
-            // INSERT ticket
-            try (PreparedStatement stmt = conn.prepareStatement(insertSql)) {
                 stmt.setInt(1, ticket.getEventId());
                 stmt.setInt(2, customerId);
                 stmt.setString(3, ticket.getTicketType());
                 stmt.setInt(4, ticket.getAmount());
-                stmt.setString(5, email);
-                stmt.executeUpdate();
-            }
+                stmt.setString(5, ticket.getEmail());
+                stmt.setString(6, ticket.getBarcode());
 
-            // UPDATE TicketsSold
-            try (PreparedStatement stmt = conn.prepareStatement(updateEventSql)) {
-                stmt.setInt(1, ticket.getAmount());
-                stmt.setInt(2, ticket.getEventId());
                 stmt.executeUpdate();
             }
 
@@ -158,7 +143,9 @@ VALUES (?,?,?,?,?, 'Active')
                 rs.getInt("TicketAmount"),
                 rs.getTimestamp("PurchaseDate") != null ? rs.getTimestamp("PurchaseDate").toLocalDateTime() : null,
                 rs.getString("Email"),
-                rs.getString("status")
+                rs.getString("status"),
+                rs.getString("Barcode")
+
         );
     }
 

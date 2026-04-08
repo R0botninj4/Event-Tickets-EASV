@@ -141,6 +141,7 @@ public class PrintTicketsController {
         System.out.println("Amount: " + ticket.getAmount());
         System.out.println("Email: " + ticket.getEmail());
         System.out.println("Purchase Date: " + ticket.getPurchaseDate());
+        System.out.println("BarCode: " + ticket.getBarcode());
         System.out.println("===========================");
     }
 

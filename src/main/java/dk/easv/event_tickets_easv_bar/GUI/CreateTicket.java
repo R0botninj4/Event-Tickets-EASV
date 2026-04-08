@@ -8,7 +8,6 @@ import dk.easv.event_tickets_easv_bar.GUI.Interface.ClosableWindow;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,8 +15,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class CreateTicket implements ClosableWindow {
@@ -25,7 +24,7 @@ public class CreateTicket implements ClosableWindow {
     private final EventDAO eventDAO = new EventDAO();
     private final TicketManager ticketManager = new TicketManager();
 
-    // 🔹 TABLE
+    // TABLE
     @FXML private TableView<Event> eventTable;
     @FXML private TableColumn<Event, String> colName;
     @FXML private TableColumn<Event, String> colDate;
@@ -34,28 +33,27 @@ public class CreateTicket implements ClosableWindow {
     @FXML private TableColumn<Event, String> colTicketsLeft;
     @FXML private TableColumn<Event, String> colTicketsSold;
 
-    // 🔹 SEARCH
+    // SEARCH
     @FXML private TextField txtSearch;
 
-    // 🔹 EVENT DISPLAY (READ-ONLY)
+    // EVENT DISPLAY
     @FXML private TextField txtEventName;
     @FXML private TextField txtDate;
     @FXML private TextField txtLocation;
 
-    // 🔹 TICKET INPUT
+    // TICKET INPUT
     @FXML private TextField txtAmount;
     @FXML private TextField txtEmail;
     @FXML private ComboBox<String> comboTicketType;
 
-    // 🔹 BUTTON
     @FXML private Button closeButton;
 
     private ObservableList<Event> allEvents = FXCollections.observableArrayList();
-
     private int selectedEventId = -1;
 
     @FXML
     public void initialize() {
+
         enableEscClose(closeButton);
 
         setupTable();
@@ -66,7 +64,6 @@ public class CreateTicket implements ClosableWindow {
         comboTicketType.getItems().addAll("Standard", "VIP", "Student");
         comboTicketType.getSelectionModel().selectFirst();
 
-        // 🔒 Make fields read-only
         txtEventName.setEditable(false);
         txtDate.setEditable(false);
         txtLocation.setEditable(false);
@@ -74,36 +71,31 @@ public class CreateTicket implements ClosableWindow {
 
     // ---------------- TABLE ----------------
     private void setupTable() {
-        colName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
-        colDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate().toString()));
-        colLocation.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLocation()));
-        colCoordinator.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCoordinatorName()));
+        colName.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getName()));
+        colDate.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getDate().toString()));
+        colLocation.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getLocation()));
+        colCoordinator.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCoordinatorName()));
 
-
-        colTicketsSold.setCellValueFactory(data ->
-                new SimpleStringProperty(String.valueOf(data.getValue().getTicketsSold()))
+        colTicketsSold.setCellValueFactory(d ->
+                new SimpleStringProperty(String.valueOf(d.getValue().getTicketsSold()))
         );
 
-        colTicketsLeft.setCellValueFactory(data -> {
-            int left = data.getValue().getTicketAmount() - data.getValue().getTicketsSold();
+        colTicketsLeft.setCellValueFactory(d -> {
+            int left = d.getValue().getTicketAmount() - d.getValue().getTicketsSold();
             return new SimpleStringProperty(String.valueOf(left));
         });
     }
 
-    // ---------------- LOAD EVENTS ----------------
     private void loadEvents() {
         List<Event> events = eventDAO.getAllEvents();
         allEvents.setAll(events);
         eventTable.setItems(allEvents);
     }
 
-    // ---------------- SELECT EVENT ----------------
     private void setupSelection() {
         eventTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 selectedEventId = newVal.getId();
-
-                // 🔥 AUTO-FILL (READ ONLY)
                 txtEventName.setText(newVal.getName());
                 txtDate.setText(newVal.getDate().toString());
                 txtLocation.setText(newVal.getLocation());
@@ -111,10 +103,8 @@ public class CreateTicket implements ClosableWindow {
         });
     }
 
-    // ---------------- SEARCH ----------------
     private void setupSearch() {
         txtSearch.textProperty().addListener((obs, oldVal, newVal) -> {
-
             String search = newVal.toLowerCase();
 
             List<Event> filtered = allEvents.stream()
@@ -134,7 +124,7 @@ public class CreateTicket implements ClosableWindow {
     private void handleSendTicket() {
 
         if (selectedEventId == -1) {
-            showError("Please select an event first!");
+            showError("Select an event first!");
             return;
         }
 
@@ -145,18 +135,21 @@ public class CreateTicket implements ClosableWindow {
 
             Ticket ticket = new Ticket(
                     selectedEventId,
-                    1, // TODO replace with logged-in user
+                    1,
                     type,
                     amount,
                     email
             );
 
+            // 🔥 GENERATE BARCODE
+            ticket.setBarcode(generateBarcode());
+
             ticketManager.buyTicket(ticket);
 
-            showSuccess("Ticket created!");
+            showSuccess("Ticket created!\nBarcode: " + ticket.getBarcode());
 
             clearFields();
-            loadEvents(); // refresh
+            loadEvents();
 
         } catch (NumberFormatException e) {
             showError("Amount must be a number!");
@@ -166,7 +159,12 @@ public class CreateTicket implements ClosableWindow {
         }
     }
 
-    //-----------------Print-----------------
+    // ---------------- BARCODE ----------------
+    private String generateBarcode() {
+        return "TCK-" + UUID.randomUUID().toString().substring(0, 12).toUpperCase();
+    }
+
+    // ---------------- PRINT ----------------
     @FXML
     private void handlePrintTicket() {
         try {
@@ -183,7 +181,6 @@ public class CreateTicket implements ClosableWindow {
         }
     }
 
-
     // ---------------- CLEAR ----------------
     private void clearFields() {
         txtAmount.clear();
@@ -191,7 +188,7 @@ public class CreateTicket implements ClosableWindow {
         comboTicketType.getSelectionModel().selectFirst();
     }
 
-    // ---------------- UI ----------------
+    // ---------------- ALERTS ----------------
     private void showError(String msg) {
         new Alert(Alert.AlertType.ERROR, msg).showAndWait();
     }

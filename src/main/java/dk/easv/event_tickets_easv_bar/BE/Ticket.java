@@ -12,8 +12,9 @@ public class Ticket {
     private LocalDateTime purchaseDate;
     private String email;
     private String status;
+    private String barcode;
 
-    public Ticket(int id, int eventId, int customerId, String ticketType, int amount, LocalDateTime purchaseDate, String email, String status) {
+    public Ticket(int id, int eventId, int customerId, String ticketType, int amount, LocalDateTime purchaseDate, String email, String status, String barcode) {
         this.id = id;
         this.eventId = eventId;
         this.customerId = customerId;
@@ -22,6 +23,7 @@ public class Ticket {
         this.purchaseDate = purchaseDate;
         this.email = email;
         this.status = status;
+        this.barcode = barcode;
     }
 
     // Constructor til oprettelse (uden id + purchaseDate)
@@ -56,4 +58,13 @@ public class Ticket {
     public String getStatus() { return status; }
 
     public void setStatus(String status) { this.status = status; }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    // SETTER
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
 }
