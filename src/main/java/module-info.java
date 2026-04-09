@@ -9,6 +9,8 @@ module dk.easv.event_tickets_easv_bar {
     requires javafx.graphics;
     requires javafx.base;
     requires de.mkammerer.argon2.nolibs;
+    requires com.google.zxing;
+    requires com.google.zxing.javase;
 
     opens dk.easv.event_tickets_easv_bar.GUI to javafx.fxml;
 

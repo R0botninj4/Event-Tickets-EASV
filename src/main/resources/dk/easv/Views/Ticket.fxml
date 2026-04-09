@@ -60,7 +60,7 @@
       </VBox>
       <VBox prefHeight="400.0" prefWidth="272.0" spacing="20.0" styleClass="ticket-background" stylesheets="@counter-strike-source.css">
          <children>
-            <ImageView fitHeight="98.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="barcodeImage" fitHeight="98.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
                   <Insets top="20.0" />
                </VBox.margin>
