@@ -58,6 +58,7 @@ public class Customers implements ClosableWindow {
 
     private void loadCustomers() {
         List<CustomerOverview> customers = userDAO.getCustomerOverview();
+        System.out.println(customers); //debug
         customerTable.setItems(FXCollections.observableArrayList(customers));
     }
 

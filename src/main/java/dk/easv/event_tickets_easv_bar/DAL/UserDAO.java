@@ -233,21 +233,19 @@ public class UserDAO implements IUserDAO {
         List<CustomerOverview> customers = new ArrayList<>();
 
         String sql = """
-            SELECT
-                u.Name,
-                u.PhoneNumber,
-                u.Email,
-                e.EventName,
-                SUM(t.TicketAmount) AS TicketsBought
-            FROM Users u
-            JOIN Tickets t ON u.UserID = t.CustomerID
-            JOIN Events e ON t.EventID = e.EventID
-            WHERE u.RoleInt = 3
-              AND t.Status = 'Active'
-              AND e.DeletedAt IS NULL
-            GROUP BY u.Name, u.PhoneNumber, u.Email, e.EventName
-            ORDER BY u.Name
-        """;
+    SELECT
+        u.Name,
+        u.PhoneNumber,
+        u.Email,
+        e.EventName,
+        SUM(COALESCE(t.TicketAmount, 0)) AS TicketsBought
+    FROM Users u
+    LEFT JOIN Tickets t ON u.UserID = t.CustomerID
+    LEFT JOIN Events e ON t.EventID = e.EventID
+    WHERE u.RoleInt = 3
+    GROUP BY u.Name, u.PhoneNumber, u.Email, e.EventName
+    ORDER BY u.Name
+""";
 
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
