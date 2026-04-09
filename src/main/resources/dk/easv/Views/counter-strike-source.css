@@ -3,3 +3,20 @@
     -fx-border-width: 1 ;
     -fx-border-style: solid;
 }
+
+
+ .ticket-background {
+     -fx-background-color: rgba(44, 44, 42, 0.26);
+ }
+
+ .ticket-vbox {
+     -fx-background-color: rgba(44, 44, 42, 0.26);
+ }
+
+ .voucher-background {
+     -fx-background-color: rgba(74, 183, 150, 0.25);
+ }
+
+ .voucher-vbox {
+     -fx-background-color: rgba(74, 183, 150, 0.25);
+ }

@@ -10,15 +10,15 @@
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="249.0" prefWidth="527.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Region prefHeight="249.0" prefWidth="188.0" styleClass="ticket-background" stylesheets="@counter-strike-source.css" />
+      <Region prefHeight="249.0" prefWidth="188.0" styleClass="voucher-background" stylesheets="@counter-strike-source.css" />
       <VBox prefHeight="400.0" prefWidth="459.0" spacing="3.0">
          <children>
-            <Label prefHeight="38.0" prefWidth="112.0" text="TICKET">
+            <Label prefHeight="38.0" prefWidth="112.0" text="Voucher">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </Label>
-            <Label prefHeight="38.0" prefWidth="112.0" text="Event Name" />
+            <Label prefHeight="38.0" prefWidth="112.0" text="VOUCHER INFO" />
             <Separator prefHeight="17.0" prefWidth="355.0">
                <VBox.margin>
                   <Insets right="30.0" />
@@ -28,14 +28,14 @@
                <children>
                   <VBox prefHeight="84.0" prefWidth="166.0">
                      <children>
-                        <Label text="START DATE" />
+                        <Label text="VALID UNTIL" />
                         <Label text="DD / MM / YYYY" />
                      </children>
                   </VBox>
                   <VBox prefHeight="99.0" prefWidth="178.0">
                      <children>
-                        <Label text="END DATE" />
-                        <Label text="DD / MM / YYYY" />
+                        <Label text="CAN BE USED FOR" />
+                        <Label text="ALL EVENT / SPECIFIC EVENT" />
                      </children>
                   </VBox>
                </children>
@@ -43,9 +43,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </HBox>
-            <Label text="LOCATION" />
-            <Label text="location" />
-            <Label text="TICKET ID">
+            <Label text="VOUCHER ID">
                <VBox.margin>
                   <Insets bottom="20.0" top="20.0" />
                </VBox.margin>
@@ -58,7 +56,7 @@
             <Insets left="10.0" />
          </padding>
       </VBox>
-      <VBox prefHeight="400.0" prefWidth="272.0" spacing="20.0" styleClass="ticket-background" stylesheets="@counter-strike-source.css">
+      <VBox prefHeight="400.0" prefWidth="272.0" spacing="20.0" styleClass="voucher-vbox" stylesheets="@counter-strike-source.css">
          <children>
             <ImageView fitHeight="98.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
