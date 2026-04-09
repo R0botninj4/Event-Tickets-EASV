@@ -178,7 +178,7 @@ public class HelloController implements Initializable {
 
     @FXML
     private void onClickOpenVoucher(ActionEvent actionEvent) throws IOException {
-        openWindow("/dk/easv/Views/Voucher-view.fxml", "Voucher Info");
+        openWindow("/dk/easv/Views/CreateVoucher-view.fxml", "Voucher Info");
     }
 
     @FXML
