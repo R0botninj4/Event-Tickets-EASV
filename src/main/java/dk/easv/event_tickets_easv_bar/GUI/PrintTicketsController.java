@@ -10,6 +10,9 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
@@ -132,17 +135,26 @@ public class PrintTicketsController {
             return;
         }
 
-        String eventName = eventMap.getOrDefault(ticket.getEventId(), "Unknown");
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/dk/easv/Views/Ticket.fxml")
+            );
+            Parent root = loader.load();
 
-        System.out.println("===== PRINTING TICKET =====");
-        System.out.println("Event: " + eventName);
-        System.out.println("Customer ID: " + ticket.getCustomerId());
-        System.out.println("Type: " + ticket.getTicketType());
-        System.out.println("Amount: " + ticket.getAmount());
-        System.out.println("Email: " + ticket.getEmail());
-        System.out.println("Purchase Date: " + ticket.getPurchaseDate());
-        System.out.println("BarCode: " + ticket.getBarcode());
-        System.out.println("===========================");
+            TicketViewController controller = loader.getController();
+
+            Event event = eventDAO.getEventById(ticket.getEventId());
+
+            controller.setTicket(ticket, event);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Ticket");
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // ---------------- CLOSE ----------------
