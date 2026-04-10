@@ -150,6 +150,7 @@ public class PrintTicketsController {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Ticket");
+            stage.setResizable(false);
             stage.show();
 
         } catch (Exception e) {
