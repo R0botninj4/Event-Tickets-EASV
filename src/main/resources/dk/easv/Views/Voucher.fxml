@@ -13,11 +13,12 @@
       <Region prefHeight="249.0" prefWidth="188.0" styleClass="voucher-background" stylesheets="@counter-strike-source.css" />
       <VBox prefHeight="400.0" prefWidth="459.0" spacing="3.0">
          <children>
-            <Label prefHeight="38.0" prefWidth="112.0" text="Voucher">
+            <Label prefHeight="38.0" prefWidth="112.0" text="VOUCHER">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </Label>
+            <Label prefHeight="38.0" prefWidth="112.0" text="PERCENTAGE" />
             <Label prefHeight="38.0" prefWidth="112.0" text="VOUCHER INFO" />
             <Separator prefHeight="17.0" prefWidth="355.0">
                <VBox.margin>
