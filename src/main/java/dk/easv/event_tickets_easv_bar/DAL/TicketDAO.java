@@ -27,10 +27,16 @@ public class TicketDAO implements ITicketDAO {
     @Override
     public void buyTicket(Ticket ticket) {
 
-        String sql = """
-    INSERT INTO Tickets 
-    (EventID, CustomerID, TicketType, TicketAmount, Email, Status, Barcode)
-    VALUES (?,?,?,?,?, 'Active', ?)
+        String insertSql = """
+        INSERT INTO Tickets 
+        (EventID, CustomerID, TicketType, TicketAmount, Email, Status, Barcode)
+        VALUES (?,?,?,?,?, 'Active', ?)
+    """;
+
+        String updateEventSql = """
+        UPDATE Events
+        SET TicketsSold = TicketsSold + 1
+        WHERE EventID = ?
     """;
 
         try (Connection conn = dbConnector.getConnection()) {
@@ -38,19 +44,24 @@ public class TicketDAO implements ITicketDAO {
             conn.setAutoCommit(false);
 
             UserDAO userDAO = new UserDAO();
-
             User user = userDAO.getUserByEmail(ticket.getEmail());
             int customerId = (user != null) ? user.getId() : 0;
 
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+            // 🔹 INSERT ticket
+            try (PreparedStatement stmt = conn.prepareStatement(insertSql)) {
                 stmt.setInt(1, ticket.getEventId());
                 stmt.setInt(2, customerId);
                 stmt.setString(3, ticket.getTicketType());
-                stmt.setInt(4, ticket.getAmount());
+                stmt.setInt(4, ticket.getAmount()); // = 1 nu
                 stmt.setString(5, ticket.getEmail());
                 stmt.setString(6, ticket.getBarcode());
 
+                stmt.executeUpdate();
+            }
+
+            // 🔥 UPDATE TicketsSold
+            try (PreparedStatement stmt = conn.prepareStatement(updateEventSql)) {
+                stmt.setInt(1, ticket.getEventId());
                 stmt.executeUpdate();
             }
 
@@ -61,7 +72,7 @@ public class TicketDAO implements ITicketDAO {
         }
     }
 
-    // 🔍 GET ALL
+    //  GET ALL
     @Override
     public List<Ticket> getAllTickets() {
         List<Ticket> tickets = new ArrayList<>();
@@ -71,7 +82,6 @@ public class TicketDAO implements ITicketDAO {
         try (Connection conn = dbConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-
             while (rs.next()) {
                 tickets.add(createTicketFromResultSet(rs));
             }
