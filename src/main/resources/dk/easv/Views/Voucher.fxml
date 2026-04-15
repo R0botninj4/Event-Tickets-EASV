@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="249.0" prefWidth="527.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="249.0" prefWidth="527.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.event_tickets_easv_bar.GUI.VoucherViewController">
    <children>
       <Region prefHeight="249.0" prefWidth="188.0" styleClass="voucher-background" stylesheets="@counter-strike-source.css" />
       <VBox prefHeight="400.0" prefWidth="459.0" spacing="3.0">
@@ -18,8 +18,8 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Label>
-            <Label prefHeight="38.0" prefWidth="112.0" text="PERCENTAGE" />
-            <Label prefHeight="38.0" prefWidth="112.0" text="VOUCHER INFO" />
+            <Label fx:id="lblType"  prefHeight="38.0" prefWidth="112.0" text="PERCENTAGE" />
+            <Label fx:id="lblInfo" prefHeight="38.0" prefWidth="112.0" text="VOUCHER INFO" />
             <Separator prefHeight="17.0" prefWidth="355.0">
                <VBox.margin>
                   <Insets right="30.0" />
@@ -30,13 +30,13 @@
                   <VBox prefHeight="84.0" prefWidth="166.0">
                      <children>
                         <Label text="VALID UNTIL" />
-                        <Label text="DD / MM / YYYY" />
+                        <Label fx:id="lblValidUntil" text="DD / MM / YYYY" />
                      </children>
                   </VBox>
                   <VBox prefHeight="99.0" prefWidth="178.0">
                      <children>
                         <Label text="CAN BE USED FOR" />
-                        <Label text="ALL EVENT / SPECIFIC EVENT" />
+                        <Label fx:id="lblUsage" text="ALL EVENT / SPECIFIC EVENT" />
                      </children>
                   </VBox>
                </children>
@@ -44,7 +44,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </HBox>
-            <Label text="VOUCHER ID">
+            <Label fx:id="lblCode" text="VOUCHER ID">
                <VBox.margin>
                   <Insets bottom="20.0" top="20.0" />
                </VBox.margin>
@@ -59,12 +59,12 @@
       </VBox>
       <VBox prefHeight="400.0" prefWidth="272.0" spacing="20.0" styleClass="voucher-vbox" stylesheets="@counter-strike-source.css">
          <children>
-            <ImageView fitHeight="98.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="barcodeImage" fitHeight="98.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
                   <Insets top="20.0" />
                </VBox.margin>
             </ImageView>
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="216.0" text="0000 0000 0000 0000 CODE" />
+            <Label fx:id="lblBarcode" alignment="CENTER" prefHeight="17.0" prefWidth="216.0" text="0000 0000 0000 0000 CODE" />
          </children>
          <padding>
             <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />

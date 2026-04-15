@@ -23,7 +23,7 @@ public class TicketDAO implements ITicketDAO {
         }
     }
 
-    // 🔥 BUY TICKET + update TicketsSold
+    //  BUY TICKET + update TicketsSold
     @Override
     public void buyTicket(Ticket ticket) {
 
@@ -47,7 +47,7 @@ public class TicketDAO implements ITicketDAO {
             User user = userDAO.getUserByEmail(ticket.getEmail());
             int customerId = (user != null) ? user.getId() : 0;
 
-            // 🔹 INSERT ticket
+            //  INSERT ticket
             try (PreparedStatement stmt = conn.prepareStatement(insertSql)) {
                 stmt.setInt(1, ticket.getEventId());
                 stmt.setInt(2, customerId);
@@ -59,7 +59,7 @@ public class TicketDAO implements ITicketDAO {
                 stmt.executeUpdate();
             }
 
-            // 🔥 UPDATE TicketsSold
+            //  UPDATE TicketsSold
             try (PreparedStatement stmt = conn.prepareStatement(updateEventSql)) {
                 stmt.setInt(1, ticket.getEventId());
                 stmt.executeUpdate();
@@ -93,7 +93,7 @@ public class TicketDAO implements ITicketDAO {
         return tickets;
     }
 
-    // 🔍 GET BY EVENT
+    // GET BY EVENT
     @Override
     public List<Ticket> getTicketsByEvent(int eventId) {
         List<Ticket> tickets = new ArrayList<>();
@@ -118,7 +118,7 @@ public class TicketDAO implements ITicketDAO {
         return tickets;
     }
 
-    // 🔍 GET BY USER
+    //  GET BY USER
     @Override
     public List<Ticket> getTicketsByUser(int userId) {
         List<Ticket> tickets = new ArrayList<>();
@@ -143,7 +143,7 @@ public class TicketDAO implements ITicketDAO {
         return tickets;
     }
 
-    // 🔧 Helper
+    //  Helper
     private Ticket createTicketFromResultSet(ResultSet rs) throws SQLException {
         return new Ticket(
                 rs.getInt("TicketID"),
@@ -172,7 +172,7 @@ public class TicketDAO implements ITicketDAO {
             int eventId = 0;
             int amount = 0;
 
-            // 🔍 Get ticket info
+            //  Get ticket info
             try (PreparedStatement stmt = conn.prepareStatement(getTicketSql)) {
                 stmt.setInt(1, ticketId);
                 ResultSet rs = stmt.executeQuery();
@@ -183,13 +183,13 @@ public class TicketDAO implements ITicketDAO {
                 }
             }
 
-            // ❌ Cancel ticket
+            //  Cancel ticket
             try (PreparedStatement stmt = conn.prepareStatement(cancelSql)) {
                 stmt.setInt(1, ticketId);
                 stmt.executeUpdate();
             }
 
-            // 🔄 Update TicketsSold
+            //  Update TicketsSold
             try (PreparedStatement stmt = conn.prepareStatement(updateEventSql)) {
                 stmt.setInt(1, amount);
                 stmt.setInt(2, eventId);

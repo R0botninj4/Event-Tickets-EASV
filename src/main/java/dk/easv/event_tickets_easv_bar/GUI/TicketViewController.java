@@ -53,7 +53,7 @@ public class TicketViewController {
         String barcodeText = ticket.getBarcode() != null ? ticket.getBarcode() : "";
         lblBarcode.setText(barcodeText);
 
-        // 🔥 HER ER DET DU MANGLER
+        //  HER ER DET DU MANGLER
         if (!barcodeText.isEmpty()) {
             barcodeImage.setImage(generateBarcode(barcodeText));
         }

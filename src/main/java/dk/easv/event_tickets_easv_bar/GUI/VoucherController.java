@@ -8,7 +8,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.time.LocalDate;
 
@@ -124,7 +128,7 @@ public class VoucherController implements ClosableWindow {
 
         String code = codeField.getText();
         String type = typeCombo.getValue();
-        String discount = discountField.getText();   // ✅ STRING NOW
+        String discount = discountField.getText();
         LocalDate validUntil = validUntilPicker.getValue();
 
         String email = emailAllField.getText();
@@ -161,18 +165,27 @@ public class VoucherController implements ClosableWindow {
             return;
         }
 
-        showAlert("Print", """
-                VOUCHER
-                Code: %s
-                Type: %s
-                Discount: %s
-                Valid Until: %s
-                """.formatted(
-                selected.getCode(),
-                selected.getType(),
-                selected.getDiscount(),
-                selected.getValidUntil()
-        ));
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/dk/easv/Views/Voucher.fxml")
+            );
+
+            Parent root = loader.load();
+
+            VoucherViewController controller = loader.getController();
+
+            // 🔥 SEND DATA TO FXML
+            controller.setVoucher(selected);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Voucher");
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // ================= CLEAR =================
