@@ -36,7 +36,7 @@ public class VoucherViewController {
                         : "No expiry"
         );
 
-        lblUsage.setText("All Events"); // or your logic
+        lblUsage.setText("All Events");
 
         lblCode.setText(voucher.getCode());
         lblBarcode.setText(voucher.getCode());

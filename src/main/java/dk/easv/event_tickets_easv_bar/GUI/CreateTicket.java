@@ -123,7 +123,7 @@ public class CreateTicket implements ClosableWindow {
     @FXML
     private void handleSendTicket() {
 
-        // 🔒 Check event selected
+        //Check event selected
         if (selectedEventId == -1) {
             showError("Select an event first!");
             return;
@@ -134,7 +134,7 @@ public class CreateTicket implements ClosableWindow {
             String type = comboTicketType.getValue();
             String email = txtEmail.getText();
 
-            // 🔒 Basic validation
+            //Basic validation
             if (amount <= 0) {
                 showError("Amount must be greater than 0!");
                 return;
@@ -145,14 +145,14 @@ public class CreateTicket implements ClosableWindow {
                 return;
             }
 
-            // 🔥 CREATE MULTIPLE TICKETS
+            // CREATE MULTIPLE TICKETS
             for (int i = 0; i < amount; i++) {
 
                 Ticket ticket = new Ticket(
                         selectedEventId,
-                        1, // TODO: replace with logged-in user ID later
+                        1, //Placeholder
                         type,
-                        1, // ✅ ONE ticket per row
+                        1, //ONE ticket per row
                         email
                 );
 

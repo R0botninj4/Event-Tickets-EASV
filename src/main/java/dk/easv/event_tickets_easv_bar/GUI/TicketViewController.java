@@ -63,7 +63,7 @@ public class TicketViewController {
         try {
             BitMatrix matrix = new MultiFormatWriter().encode(
                     text,
-                    BarcodeFormat.CODE_128, // perfekt til tickets
+                    BarcodeFormat.CODE_128,
                     300,
                     100
             );

@@ -2,6 +2,7 @@ package dk.easv.event_tickets_easv_bar.DAL;
 
 import dk.easv.event_tickets_easv_bar.BE.Voucher;
 import dk.easv.event_tickets_easv_bar.DAL.DB.DBConnector;
+import dk.easv.event_tickets_easv_bar.DAL.Interface.IVoucherDAO;
 
 import java.io.IOException;
 import java.sql.*;
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VoucherDAO {
+public class VoucherDAO implements IVoucherDAO {
 
     private final DBConnector dbConnector;
 

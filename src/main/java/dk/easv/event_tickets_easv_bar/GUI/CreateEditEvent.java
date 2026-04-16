@@ -62,7 +62,7 @@ public class CreateEditEvent implements ClosableWindow {
         loadTimeOptions();
         setupSearch();
 
-        // 🔥 AUTO SELECT → fill form
+        //  AUTO SELECT → fill form
         eventTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
             if (newSel != null) {
                 selectedEvent = newSel;

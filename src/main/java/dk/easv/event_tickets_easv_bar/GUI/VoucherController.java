@@ -174,7 +174,7 @@ public class VoucherController implements ClosableWindow {
 
             VoucherViewController controller = loader.getController();
 
-            // 🔥 SEND DATA TO FXML
+            // SEND DATA TO FXML
             controller.setVoucher(selected);
 
             Stage stage = new Stage();

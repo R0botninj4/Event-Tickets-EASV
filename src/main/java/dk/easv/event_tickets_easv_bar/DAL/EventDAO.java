@@ -78,7 +78,7 @@ public class EventDAO implements IEventDAO {
                         rs.getString("CoordinatorName")
                 );
 
-                // ✅ NEW FIELD
+                // NEW FIELD
                 event.setLocationGuidance(rs.getString("LocationGuidance"));
 
                 events.add(event);
@@ -145,7 +145,7 @@ public class EventDAO implements IEventDAO {
                         rs.getString("CoordinatorName")
                 );
 
-                // ✅ NEW FIELD
+                // NEW FIELD
                 event.setLocationGuidance(rs.getString("LocationGuidance"));
 
                 return event;

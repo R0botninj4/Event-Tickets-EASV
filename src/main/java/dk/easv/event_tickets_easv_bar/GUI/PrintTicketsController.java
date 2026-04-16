@@ -25,7 +25,7 @@ public class PrintTicketsController {
     private final TicketManager ticketManager = new TicketManager();
     private final EventDAO eventDAO = new EventDAO();
 
-    // 🔹 TABLE
+    //TABLE
     @FXML private TableView<Ticket> ticketTable;
     @FXML private TableColumn<Ticket, String> colEvent;
     @FXML private TableColumn<Ticket, String> colType;
@@ -33,13 +33,13 @@ public class PrintTicketsController {
     @FXML private TableColumn<Ticket, String> colEmail;
     @FXML private TableColumn<Ticket, String> colDate;
 
-    // 🔹 SEARCH
+    // SEARCH
     @FXML private TextField txtSearch;
 
-    // 🔹 DATA
+    //DATA
     private ObservableList<Ticket> tickets = FXCollections.observableArrayList();
 
-    // 🔹 Cache (EventID → EventName)
+    //Cache (EventID → EventName)
     private Map<Integer, String> eventMap = new HashMap<>();
 
     @FXML
@@ -47,9 +47,9 @@ public class PrintTicketsController {
         loadEventNames();
         setupTable();
 
-        tickets.addAll(ticketManager.getAllTickets()); // 🔥 load tickets
+        tickets.addAll(ticketManager.getAllTickets()); //load tickets
 
-        setupSearch(); // 🔥 live search + sorting
+        setupSearch(); //live search + sorting
     }
 
     // ---------------- LOAD EVENT NAMES ----------------

@@ -104,7 +104,7 @@ public class ManageUsers implements ClosableWindow {
         clearFields();
     }
 
-    // 💾 SAVE (CREATE + UPDATE)
+    // SAVE (CREATE + UPDATE)
     @FXML
     private void updateUser() {
 
